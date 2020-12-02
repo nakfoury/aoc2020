@@ -8,4 +8,4 @@ def getInput(day):
         (resp, content) = h.request("https://adventofcode.com/2020/day/{}/input".format(day), "GET",
                                     headers={'content-type': 'text/plain', 'Cookie': str(cookie), })
         open('input/input{}.txt'.format(day),'w').write(content.decode('utf-8'))
-    return open('input/input{}.txt'.format(day), 'r').read()
+    return open('input/input{}.txt'.format(day), 'r').readlines()

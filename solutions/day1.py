@@ -1,5 +1,5 @@
 def day1(input, b=False):
-    inp = list(map(int, input.split('\n')[:-1]))
+    inp = list(map(int, input))
     if not b:
         d = list(map(lambda x: 2020 - int(x), inp))
         for n in d:

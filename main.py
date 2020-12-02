@@ -4,7 +4,7 @@ import argparse
 from collections import defaultdict
 
 from util import getInput
-from solutions import day1
+from solutions import day1, day2
 
 parser = argparse.ArgumentParser()
 
@@ -15,6 +15,7 @@ args = parser.parse_args()
 
 solutions = defaultdict(None)  # Dictionary of puzzle-day solution functions
 solutions[1] = day1.day1
+solutions[2] = day2.day2
 
 def main():
     inp = getInput(args.day)
