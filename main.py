@@ -17,6 +17,7 @@ solutions = defaultdict(None)  # Dictionary of puzzle-day solution functions
 solutions[1] = day1.day1
 solutions[2] = day2.day2
 
+
 def main():
     inp = getInput(args.day)
     result = solutions[args.day](inp, args.b)

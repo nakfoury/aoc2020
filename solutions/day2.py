@@ -10,7 +10,7 @@ def day2(input, b=False):
                 if int(m.group(1)) <= m.group(4).count(m.group(3)) <= int(m.group(2)):
                     result += 1
             else:
-                if (m.group(4)[int(m.group(1)) - 1] == m.group(3) and m.group(4)[int(m.group(2)) - 1] != m.group(3)) or \
-                        (m.group(4)[int(m.group(1)) - 1] != m.group(3) and m.group(4)[int(m.group(2)) - 1] == m.group(3)):
+                if (m.group(4)[int(m.group(1)) - 1] == m.group(3)) != (m.group(4)[int(m.group(2)) - 1] == m.group(3)):
                     result += 1
     return result
+
