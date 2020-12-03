@@ -12,7 +12,7 @@ def day1(input, b=False):
         for x in inp:
             for y in inp:
                 if 2020 - x - y in inp:
-                    return x * y * (2020 - x -y)
+                    return x * y * (2020 - x - y)
     return None
 
 
@@ -27,4 +27,22 @@ def day2(input, b=False):
             else:
                 if (m.group(4)[int(m.group(1)) - 1] == m.group(3)) != (m.group(4)[int(m.group(2)) - 1] == m.group(3)):
                     result += 1
+    return result
+
+
+def day3(inp, b=False):
+    if not b:
+        return eval_slope(inp, 3, 1)
+    else:
+        return eval_slope(inp, 1, 1) * eval_slope(inp, 3, 1) * eval_slope(inp, 5, 1) \
+               * eval_slope(inp, 7, 1) * eval_slope(inp, 1, 2)
+
+
+def eval_slope(inp, r, d):
+    result = 0
+    for i, row in enumerate(inp):
+        if i % d > 0:
+            continue
+        if row[((r * int(i/d)) % len(row))] == '#':
+            result += 1
     return result

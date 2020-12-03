@@ -3,8 +3,8 @@
 import argparse
 from collections import defaultdict
 
-import util
 import solutions
+import util
 
 parser = argparse.ArgumentParser()
 
@@ -16,12 +16,13 @@ args = parser.parse_args()
 s = defaultdict(None)  # Dictionary of puzzle-day solution functions
 s[1] = solutions.day1
 s[2] = solutions.day2
+s[3] = solutions.day3
 
 
 def run_solution(d, b=False):
-    inp = util.getInput(d)
-    result = s[d](inp, b)
-    print("Day {}{}: {}".format(d, ('b' if b else 'a'), result))
+    inp = [x.strip('\n') for x in util.getInput(d)]
+    f = s[d]
+    print("Day {}{}: {}".format(d, 'b' if b else 'a', f(inp, b) if f else "No Solution Found"))
 
 
 def main():
