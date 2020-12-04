@@ -11,3 +11,4 @@ def getInput(day):
                                     headers={'content-type': 'text/plain', 'Cookie': str(cookie), })
         open('input/input{}.txt'.format(day), 'w').write(content.decode('utf-8'))
     return open('input/input{}.txt'.format(day), 'r').readlines()
+

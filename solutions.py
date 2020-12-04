@@ -48,6 +48,56 @@ def eval_slope(inp, r, d):
     return result
 
 
-# --- Day 4 --- #
+# --- Day 4: Passport Processing --- #
 def day4(inp, b=False):
+    result = 0
+    p = 0
+    valid = set(['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'])
+    expression = r'(\w+):(#?\w+)' if b else r'(\w+):'
+    inp.append('')
+    g = (i for i, e in enumerate(inp) if e == '')
+
+    for n in g:
+        passport = ' '.join(inp[p:n])
+        m = re.findall(expression, passport)
+
+        if not b:
+            fields = set(m)
+            if fields.issuperset(valid):
+                result += 1
+        else:
+            fields = dict(m)
+            if set(fields.keys()).issuperset(valid):
+                if validate_fields(fields):
+                    result += 1
+        p = n
+
+    return result
+
+
+def validate_fields(f):
+    if int(f['byr']) < 1920 or int(f['byr']) > 2002:
+        return False
+    if int(f['iyr']) < 2010 or int(f['iyr']) > 2020:
+        return False
+    if int(f['eyr']) < 2020 or int(f['eyr']) > 2030:
+        return False
+    if f['hgt'][-2:] == 'cm':
+        if int(f['hgt'][:-2]) < 150 or int(f['hgt'][:-2]) > 193:
+            return False
+    elif f['hgt'][-2:] == 'in':
+        if int(f['hgt'][:-2]) < 59 or int(f['hgt'][:-2]) > 76:
+            return False
+    else:
+        return False
+    if not re.match(r'#[0-9a-f]{6}', f['hcl']):
+        return False
+    if f['ecl'] not in ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth', ]:
+        return False
+    if not re.match(r'\d{9}', f['pid']):
+        return False
+    return True
+
+
+def day5(inp, b=False):
     return
