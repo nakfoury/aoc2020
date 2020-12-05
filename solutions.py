@@ -2,8 +2,8 @@ import re
 
 
 # --- Day 1: Report Repair --- #
-def day1(input, b=False):
-    inp = list(map(int, input))
+def day1(inp, b=False):
+    inp = list(map(int, inp))
     if not b:
         d = list(map(lambda x: 2020 - int(x), inp))
         for n in d:
@@ -18,9 +18,9 @@ def day1(input, b=False):
 
 
 # --- Day 2: Password Philosophy --- #
-def day2(input, b=False):
+def day2(inp, b=False):
     result = 0
-    for pwd in input:
+    for pwd in inp:
         m = re.search(r'(\d+)-(\d+) (\w): (\w+)', pwd)
         if m:
             if not b:
@@ -52,7 +52,7 @@ def eval_slope(inp, r, d):
 def day4(inp, b=False):
     result = 0
     p = 0
-    valid = set(['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'])
+    valid = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
     expression = r'(\w+):(#?\w+)' if b else r'(\w+):'
     inp.append('')
     g = (i for i, e in enumerate(inp) if e == '')
@@ -101,7 +101,6 @@ def validate_fields(f):
 
 # --- Day 5: Binary Boarding --- #
 def day5(inp, b=False):
-    maxSeat = 0
     seats = []
     for boarding_pass in inp:
         row = binary_search(boarding_pass[:7], list(range(128)))
@@ -110,21 +109,32 @@ def day5(inp, b=False):
     return find_seat(sorted(seats)) if b else max(seats)
 
 
-def binary_search(sequence, rng):
-    if sequence == '':
+def binary_search(seq, rng):
+    if seq == '':
         return rng[0]
-    if sequence[0] == 'F' or sequence[0] == 'L':
-        return binary_search(sequence[1:], rng[:int(len(rng)/2)])
-    elif sequence[0] == 'B' or sequence[0] == 'R':
-        return binary_search(sequence[1:], rng[int(len(rng)/2):])
+    if seq[0] == 'F' or seq[0] == 'L':
+        return binary_search(seq[1:], rng[:int(len(rng) / 2)])
+    elif seq[0] == 'B' or seq[0] == 'R':
+        return binary_search(seq[1:], rng[int(len(rng) / 2):])
 
 
 def find_seat(seats):
     for i, seat in enumerate(seats):
-        if seat + 1 != seats[i+1]:
+        if seat + 1 != seats[i + 1]:
             return seat + 1
+    return -1
 
 
 # --- Day 6: ??? --- #
 def day6(inp, b=False):
-    return
+    return -1
+
+
+solutions = {
+    1: day1,
+    2: day2,
+    3: day3,
+    4: day4,
+    5: day5,
+    6: day6,
+}

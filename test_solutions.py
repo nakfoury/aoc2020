@@ -117,4 +117,12 @@ def test_day5a():
 
 
 def test_day5b():
-    assert solutions.day5(['BFFFBBFRLL','BFFFBBFRRL','BFFFBBFRRR'], True) == 565
+    assert solutions.day5(['BFFFBBFRLL', 'BFFFBBFRRL', 'BFFFBBFRRR'], True) == 565
+
+
+def test_day6a():
+    assert solutions.day6(['BFFFBBFRRR']) == -1
+
+
+def test_day6b():
+    assert solutions.day6(['BFFFBBFRLL', 'BFFFBBFRRL', 'BFFFBBFRRR'], True) == -1
