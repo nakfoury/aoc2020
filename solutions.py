@@ -99,5 +99,32 @@ def validate_fields(f):
     return True
 
 
+# --- Day 5: Binary Boarding --- #
 def day5(inp, b=False):
+    maxSeat = 0
+    seats = []
+    for boarding_pass in inp:
+        row = binary_search(boarding_pass[:7], list(range(128)))
+        col = binary_search(boarding_pass[-3:], list(range(8)))
+        seats.append(row * 8 + col)
+    return find_seat(sorted(seats)) if b else max(seats)
+
+
+def binary_search(sequence, rng):
+    if sequence == '':
+        return rng[0]
+    if sequence[0] == 'F' or sequence[0] == 'L':
+        return binary_search(sequence[1:], rng[:int(len(rng)/2)])
+    elif sequence[0] == 'B' or sequence[0] == 'R':
+        return binary_search(sequence[1:], rng[int(len(rng)/2):])
+
+
+def find_seat(seats):
+    for i, seat in enumerate(seats):
+        if seat + 1 != seats[i+1]:
+            return seat + 1
+
+
+# --- Day 6: ??? --- #
+def day6(inp, b=False):
     return
