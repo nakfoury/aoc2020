@@ -125,8 +125,21 @@ def find_seat(seats):
     return -1
 
 
-# --- Day 6: ??? --- #
+# --- Day 6: Custom Customs --- #
 def day6(inp, b=False):
+    result, p = 0, 0
+    f = set.union if not b else set.intersection
+    inp.append('')
+    g = (i for i, e in enumerate(inp) if e == '')
+    for n in g:
+        group = list(map(set, inp[p:n]))
+        result += len(f(*group))
+        p = n + 1
+    return result
+
+
+# --- Day 7: ??? --- #
+def day7(inp, b=False):
     return -1
 
 
@@ -137,4 +150,5 @@ solutions = {
     4: day4,
     5: day5,
     6: day6,
+    7: day7,
 }

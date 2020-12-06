@@ -121,8 +121,36 @@ def test_day5b():
 
 
 def test_day6a():
-    assert solutions.day6(['BFFFBBFRRR']) == -1
+    assert solutions.day6(['abc',
+                           '',
+                           'a',
+                           'b',
+                           'c',
+                           '',
+                           'ab',
+                           'ac',
+                           '',
+                           'a',
+                           'a',
+                           'a',
+                           'a',
+                           '',
+                           'b', ]) == 11
 
 
 def test_day6b():
-    assert solutions.day6(['BFFFBBFRLL', 'BFFFBBFRRL', 'BFFFBBFRRR'], True) == -1
+    assert solutions.day6(['abc',
+                           '',
+                           'a',
+                           'b',
+                           'c',
+                           '',
+                           'ab',
+                           'ac',
+                           '',
+                           'a',
+                           'a',
+                           'a',
+                           'a',
+                           '',
+                           'b', ], b=True) == 6
