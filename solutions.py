@@ -138,9 +138,42 @@ def day6(inp, b=False):
     return result
 
 
-# --- Day 7: ??? --- #
+# --- Day 7: Handy Haversacks --- #
 def day7(inp, b=False):
-    return -1
+    rules = {}
+    for r in inp:
+        rules[re.search(r'(.*) bags contain', r).group(1)] = re.findall(r'(?:(no|\d+) (.*?) bags?[,.])', r)
+
+    if not b:
+        colors = []
+        add_parents(rules, 'shiny gold', colors)
+        return len(colors)
+    else:
+        return count_children(rules, 'shiny gold') - 1
+
+
+def add_parents(rules, c, color_list):
+    for r in rules:
+        for item in rules[r]:
+            if item[1] == c and r not in color_list:
+                color_list.append(r)
+                add_parents(rules, r, color_list)
+    return
+
+
+def count_children(rules, c):
+    x = 0
+    for count, color in rules[c]:
+        if count == 'no':
+            return 1
+        else:
+            x += int(count) * count_children(rules, color)
+    return x + 1
+
+
+# --- Day 8: ??? --- #
+def day8(inp, b):
+    return 0
 
 
 solutions = {
@@ -151,4 +184,5 @@ solutions = {
     5: day5,
     6: day6,
     7: day7,
+    8: day8,
 }
