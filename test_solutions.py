@@ -184,12 +184,28 @@ def test_day7b():
                            'dark olive bags contain 3 faded blue bags, 4 dotted black bags.',
                            'vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.',
                            'faded blue bags contain no other bags.',
-                           'dotted black bags contain no other bags.',], b = True) == 32
+                           'dotted black bags contain no other bags.', ], b=True) == 32
 
 
 def test_day8a():
-    assert solutions.day8([]) == 0
+    assert solutions.day8(['nop +0',
+                           'acc +1',
+                           'jmp +4',
+                           'acc +3',
+                           'jmp -3',
+                           'acc -99',
+                           'acc +1',
+                           'jmp -4',
+                           'acc +6', ]) == 5
 
 
 def test_day8b():
-    assert solutions.day8([], b=True) == 0
+    assert solutions.day8(['nop +0',
+                           'acc +1',
+                           'jmp +4',
+                           'acc +3',
+                           'jmp -3',
+                           'acc -99',
+                           'acc +1',
+                           'jmp -4',
+                           'acc +6', ], b=True) == 8

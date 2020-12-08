@@ -1,4 +1,5 @@
 import re
+import copy
 
 
 # --- Day 1: Report Repair --- #
@@ -171,9 +172,45 @@ def count_children(rules, c):
     return x + 1
 
 
-# --- Day 8: ??? --- #
-def day8(inp, b):
-    return 0
+# --- Day 8: Handheld Halting --- #
+def day8(inp, b=False):
+    if not b:
+        return run_handheld(inp)[0]
+    else:
+        for i, l in enumerate(inp):
+            test_code = copy.copy(inp)
+            if l[:3] == 'acc':
+                continue
+            elif l[:3] == 'jmp':
+                test_code[i] = test_code[i].replace('jmp', 'nop')
+            elif l[:3] == 'nop':
+                test_code[i] = test_code[i].replace('nop', 'jmp')
+            out, err = run_handheld(test_code)
+            if err == 0:
+                return out
+
+
+def run_handheld(code):
+    accumulator, cptr, pptr = 0, 0, 0
+    visited = []
+    while True:
+        if cptr == len(code):
+            return accumulator, 0
+        if cptr in visited:
+            return accumulator, 1
+        else:
+            visited.append(cptr)
+        if code[cptr][:3] == 'acc':
+            accumulator += int(code[cptr][4:])
+            cptr += 1
+        elif code[cptr][:3] == 'jmp':
+            cptr += int(code[cptr][4:])
+        else:
+            cptr += 1
+
+
+def day9(inp, b=False):
+    return -1
 
 
 solutions = {
@@ -185,4 +222,5 @@ solutions = {
     6: day6,
     7: day7,
     8: day8,
+    9: day9,
 }
