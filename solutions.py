@@ -1,6 +1,5 @@
 import re
 import copy
-import numpy as np
 
 
 # --- Day 1: Report Repair --- #
@@ -230,10 +229,6 @@ def read_preamble(preamble):
     return table
 
 
-def list_sums(n, lst):
-    return [n + m for m in lst]
-
-
 def lookup_table(n, table):
     for i in table:
         if n in i[1:]:
@@ -246,7 +241,7 @@ def update_table(n, table):
     for row in table:
         row.pop(1)
         row.append(n + row[0])
-    table.append([n] + list_sums(n, [table[x][0] for x in range(len(table))]))
+    table.append([n] + [n + m for m in [table[x][0] for x in range(len(table))]])
     return table
 
 
