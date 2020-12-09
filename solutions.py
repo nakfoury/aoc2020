@@ -1,5 +1,6 @@
 import re
 import copy
+import numpy as np
 
 
 # --- Day 1: Report Repair --- #
@@ -209,7 +210,55 @@ def run_handheld(code):
             cptr += 1
 
 
+# --- Day 9: Encoding Error --- #
 def day9(inp, b=False):
+    xmas_code = list(map(int, inp))
+    xmas_table = read_preamble(xmas_code[:25])
+    for n in xmas_code[25:]:
+        if not lookup_table(n, xmas_table):
+            return n if not b else weakness(n, xmas_code)
+        update_table(n, xmas_table)
+    return -1
+
+
+def read_preamble(preamble):
+    table = []
+    for i in range(25):
+        sums = [preamble[i]] + [preamble[i] + x for x in preamble]
+        sums.remove(preamble[i]*2)
+        table.append(sums)
+    return table
+
+
+def list_sums(n, lst):
+    return [n + m for m in lst]
+
+
+def lookup_table(n, table):
+    for i in table:
+        if n in i[1:]:
+            return True
+    return False
+
+
+def update_table(n, table):
+    table.pop(0)
+    for row in table:
+        row.pop(1)
+        row.append(n + row[0])
+    table.append([n] + list_sums(n, [table[x][0] for x in range(len(table))]))
+    return table
+
+
+def weakness(n, lst):
+    for i in range(len(lst)):
+        for j in range(1, len(lst)):
+            if sum(lst[i:j]) == n:
+                return max(lst[i:j]) + min(lst[i:j])
+
+
+# --- Day 10: ??? --- #
+def day10(inp, b=True):
     return -1
 
 
@@ -223,4 +272,5 @@ solutions = {
     7: day7,
     8: day8,
     9: day9,
+    10: day10,
 }
