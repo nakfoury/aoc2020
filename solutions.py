@@ -224,7 +224,7 @@ def read_preamble(preamble):
     table = []
     for i in range(25):
         sums = [preamble[i]] + [preamble[i] + x for x in preamble]
-        sums.remove(preamble[i]*2)
+        sums.remove(preamble[i] * 2)
         table.append(sums)
     return table
 
@@ -252,8 +252,31 @@ def weakness(n, lst):
                 return max(lst[i:j]) + min(lst[i:j])
 
 
-# --- Day 10: ??? --- #
-def day10(inp, b=True):
+# --- Day 10: Adapter Array --- #
+def day10(inp, b=False):
+    chain = sorted(list(map(int, inp)))
+    if not b:
+        ones, threes = 1, 1
+        for i in range(len(chain) - 1):
+            if chain[i + 1] - chain[i] == 1:
+                ones += 1
+            elif chain[i + 1] - chain[i] == 3:
+                threes += 1
+        return ones * threes
+    else:
+        adapter_combos = {}
+        chain.insert(0, 0)
+        for joltage in chain:
+            previous_adapters = sorted(list(set.intersection({joltage - 1, joltage - 2, joltage - 3}, set(chain))))
+            if not previous_adapters:
+                adapter_combos[joltage] = 1
+            else:
+                adapter_combos[joltage] = sum([adapter_combos[x] for x in previous_adapters])
+    return adapter_combos[chain[-1]]
+
+
+# --- Day 11: ??? --- #
+def day11(inp, b=False):
     return -1
 
 
@@ -268,4 +291,5 @@ solutions = {
     8: day8,
     9: day9,
     10: day10,
+    11: day11,
 }
