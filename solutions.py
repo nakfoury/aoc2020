@@ -1,5 +1,8 @@
 import re
 import copy
+import numpy as np
+
+import util
 
 
 # --- Day 1: Report Repair --- #
@@ -275,9 +278,58 @@ def day10(inp, b=False):
     return adapter_combos[chain[-1]]
 
 
-# --- Day 11: ??? --- #
+# --- Day 11: Seating System --- #
 def day11(inp, b=False):
-    return -1
+    chart = []
+    for i, l in enumerate(inp):
+        chart.append([c for c in l])
+    chart = np.array(chart)
+    while True:
+        flips = musical_chairs(chart, b, 5 if b else 4)
+        new_chart = flip_seats(copy.copy(chart), flips)
+        if np.array_equal(chart, new_chart):
+            return count_occupied(new_chart)
+        chart = new_chart
+
+
+def musical_chairs(chart, looking=False, tolerance=4):
+    flips = []
+    for i in range(chart.shape[0]): #  i is the row
+        for j in range(chart.shape[1]): #  j is the column
+            hsh = 0
+            for adj in util.adjacent_eight(i, j):
+                s = 1
+                while True:
+                    if not util.is_in_bounds(i + adj[0] * s, j + adj[1] * s, chart.shape[0], chart.shape[1]):
+                        break
+                    if chart[i + adj[0] * s, j + adj[1] * s] == 'L':
+                        break
+                    if chart[i + adj[0] * s, j + adj[1] * s] == '#':
+                        hsh += 1
+                        break
+                    if looking:
+                        s += 1
+                    else:
+                        break
+            if (chart[i, j] == 'L' and hsh == 0) or (chart[i, j] == '#' and hsh >= tolerance):
+                flips.append((i, j))
+    return flips
+
+
+
+def flip_seats(chart, flips):
+    for seat in flips:
+        chart[seat] = '#' if chart[seat] == 'L' else 'L'
+    return chart
+
+
+def count_occupied(chart):
+    occupied = 0
+    for i in range(chart.shape[0]):
+        for j in range(chart.shape[1]):
+            if chart[i, j] == '#':
+                occupied += 1
+    return occupied
 
 
 solutions = {

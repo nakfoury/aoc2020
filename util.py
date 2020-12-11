@@ -15,3 +15,18 @@ def getInput(day):
             return None
         open('input/input{}.txt'.format(day), 'w').write(content.decode('utf-8'))
     return open('input/input{}.txt'.format(day), 'r').readlines()
+
+
+def adjacent_eight(x, y):
+    result = []
+    for i in [-1, 0, 1]:
+        for j in [-1, 0, 1]:
+            result.append((i, j))
+    result.remove((0, 0))
+    return list(set(result))
+
+
+def is_in_bounds(x, y, rows, cols):
+    if x < 0 or x >= rows or y < 0 or y >= cols:
+        return False
+    return True
