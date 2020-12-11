@@ -292,12 +292,12 @@ def day11(inp, b=False):
         chart = new_chart
 
 
-def musical_chairs(chart, looking=False, tolerance=4):
+def musical_chairs(chart, looking, tolerance):
     flips = []
-    for i in range(chart.shape[0]): #  i is the row
-        for j in range(chart.shape[1]): #  j is the column
+    for i in range(chart.shape[0]):  # i is the row
+        for j in range(chart.shape[1]):  # j is the column
             hsh = 0
-            for adj in util.adjacent_eight(i, j):
+            for adj in util.adjacent_eight():
                 s = 1
                 while True:
                     if not util.is_in_bounds(i + adj[0] * s, j + adj[1] * s, chart.shape[0], chart.shape[1]):
@@ -316,7 +316,6 @@ def musical_chairs(chart, looking=False, tolerance=4):
     return flips
 
 
-
 def flip_seats(chart, flips):
     for seat in flips:
         chart[seat] = '#' if chart[seat] == 'L' else 'L'
@@ -332,6 +331,11 @@ def count_occupied(chart):
     return occupied
 
 
+# --- Day 12: ??? --- #
+def day12(inp, b=False):
+    return -1
+
+
 solutions = {
     1: day1,
     2: day2,
@@ -344,4 +348,5 @@ solutions = {
     9: day9,
     10: day10,
     11: day11,
+    12: day12,
 }

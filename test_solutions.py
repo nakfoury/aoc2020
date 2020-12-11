@@ -373,3 +373,11 @@ def test_day11b():
                             'LLLLLLLLLL',
                             'L.LLLLLL.L',
                             'L.LLLLL.LL', ], b=True) == 26
+
+
+def test_day12a():
+    assert solutions.day12([]) == -1
+
+
+def test_day12b():
+    assert solutions.day12([], b=True) == -1

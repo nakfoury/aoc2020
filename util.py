@@ -17,7 +17,7 @@ def getInput(day):
     return open('input/input{}.txt'.format(day), 'r').readlines()
 
 
-def adjacent_eight(x, y):
+def adjacent_eight():
     result = []
     for i in [-1, 0, 1]:
         for j in [-1, 0, 1]:
