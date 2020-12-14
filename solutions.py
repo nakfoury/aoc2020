@@ -1,6 +1,7 @@
 import re
 import copy
 import numpy as np
+from functools import reduce
 
 import util
 
@@ -331,9 +332,63 @@ def count_occupied(chart):
     return occupied
 
 
-# --- Day 12: ??? --- #
+# --- Day 12: Rain Risk --- #
 def day12(inp, b=False):
     return -1
+
+
+# --- Day 13: Shuttle Search --- #
+def day13(inp, b=False):
+    if not b:
+        delays = sorted([(int(x) - int(inp[0]) % int(x), int(x)) for x in inp[1].split(',') if x != 'x'], key=lambda x: x[0])
+        return delays[0][0] * delays[0][1]
+    else:
+        sched = {}
+        result = 0
+        for t, bus in enumerate(inp[1].split(',')):
+            if bus != 'x':
+                sched[t] = int(bus)
+        prod = reduce(lambda x, y: x * y, sched.values())
+        for time in sched:
+            result += find_mod_factor(time, sched[time], int(prod / sched[time]))
+        return result % prod
+
+
+def find_mod_factor(n, mod, subprod):
+    factor = 1
+    congr = subprod % mod
+    while True:
+        # if n % mod == (congr * factor) % mod:
+        if (mod - (n % mod)) % mod == (congr * factor) % mod:
+            return factor * subprod
+        factor += 1
+
+
+# --- Day 14: Docking Data --- #
+def day14(inp, b=False):
+    mem = {}
+    zeroes, ones = 0, 0
+    if not b:
+        for l in inp:
+            if l[:4] == 'mask':
+                zeroes, ones = convert_masks(l[-36:])
+            else:
+                # m = re.match(r'mem\[(\d+)\]', l)
+                mem[re.match(r'mem\[(\d+)\]', l).group(1)] = int(l.split(' = ')[1]) & zeroes | ones
+                continue
+    else:
+        return -1
+        for l in inp:
+            # TODO Solve 14b
+            return -1
+    return sum(mem.values())
+
+
+def convert_masks(s, floating=False):
+    if not floating:
+        zeroes = int(s.replace('X', '1'), 2)
+        ones = int(s.replace('X', '0'), 2)
+        return zeroes, ones
 
 
 solutions = {
@@ -349,4 +404,6 @@ solutions = {
     10: day10,
     11: day11,
     12: day12,
+    13: day13,
+    14: day14,
 }

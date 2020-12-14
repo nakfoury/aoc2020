@@ -351,15 +351,15 @@ def test_day10b():
 
 def test_day11a():
     assert solutions.day11(['L.LL.LL.LL',
-'LLLLLLL.LL',
-'L.L.L..L..',
-'LLLL.LL.LL',
-'L.LL.LL.LL',
-'L.LLLLL.LL',
-'..L.L.....',
-'LLLLLLLLLL',
-'L.LLLLLL.L',
-'L.LLLLL.LL', ]) == 37
+                            'LLLLLLL.LL',
+                            'L.L.L..L..',
+                            'LLLL.LL.LL',
+                            'L.LL.LL.LL',
+                            'L.LLLLL.LL',
+                            '..L.L.....',
+                            'LLLLLLLLLL',
+                            'L.LLLLLL.L',
+                            'L.LLLLL.LL', ]) == 37
 
 
 def test_day11b():
@@ -381,3 +381,24 @@ def test_day12a():
 
 def test_day12b():
     assert solutions.day12([], b=True) == -1
+
+
+def test_day13a():
+    assert solutions.day13(['939',
+                            '7,13,x,x,59,x,31,19', ]) == 295
+
+
+def test_day13b():
+    assert solutions.day13(['939','7,13,x,x,59,x,31,19', ], b=True) == 1068781
+
+
+def test_day14a():
+    assert solutions.day14(['mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X',
+                            'mem[8] = 11',
+                            'mem[7] = 101',
+                            'mem[8] = 0', ]) == 165
+
+
+def test_day14b():
+    assert solutions.day14([], b=True) == -1
+    assert solutions.day14([], b=True) == -1
