@@ -378,9 +378,9 @@ def day12(inp, b=False):
                 wx -= int(l[1:])
 
             if l[0] == 'L':
-                wx, wy = rotate_waypoint(wx, wy, int(l[1:]))
+                wx, wy = util.rotate_coord(wx, wy, int(l[1:]))
             if l[0] == 'R':
-                wx, wy = rotate_waypoint(wx, wy, 360 - int(l[1:]))
+                wx, wy = util.rotate_coord(wx, wy, 360 - int(l[1:]))
 
             if l[0] == 'F':
                 sx += wx * int(l[1:])
@@ -392,15 +392,6 @@ def day12(inp, b=False):
 def chdir(heading, deg):
     compass = 'ENWS'
     return compass[int((compass.index(heading) + deg / 360 * 4) % 4)]
-
-
-def rotate_waypoint(wx, wy, deg):
-    if deg == 90:
-        return -wy, wx
-    if deg == 180:
-        return -wx, -wy
-    if deg == 270:
-        return wy, -wx
 
 
 # --- Day 13: Shuttle Search --- #

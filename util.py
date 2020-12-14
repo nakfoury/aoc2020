@@ -30,3 +30,12 @@ def is_in_bounds(x, y, rows, cols):
     if x < 0 or x >= rows or y < 0 or y >= cols:
         return False
     return True
+
+
+def rotate_coord(x, y, deg):
+    if deg == 90:
+        return -y, x
+    if deg == 180:
+        return -x, -y
+    if deg == 270:
+        return y, -x
