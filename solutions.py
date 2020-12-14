@@ -335,13 +335,79 @@ def count_occupied(chart):
 
 # --- Day 12: Rain Risk --- #
 def day12(inp, b=False):
-    return -1
+    sx, sy = 0, 0
+    wx, wy = 10, 1
+    heading = 'E'
+
+    headings = {
+        'E': (1, 0),
+        'N': (0, 1),
+        'W': (-1, 0),
+        'S': (0, -1),
+    }
+
+    if not b:
+        for l in inp:
+            if l[0] == 'N':
+                sy += int(l[1:])
+            if l[0] == 'S':
+                sy -= int(l[1:])
+            if l[0] == 'E':
+                sx += int(l[1:])
+            if l[0] == 'W':
+                sx -= int(l[1:])
+
+            if l[0] == 'L':
+                heading = chdir(heading, int(l[1:]))
+            if l[0] == 'R':
+                heading = chdir(heading, 360 - int(l[1:]))
+
+            if l[0] == 'F':
+                sx += headings[heading][0] * int(l[1:])
+                sy += headings[heading][1] * int(l[1:])
+
+    else:
+        for l in inp:
+            if l[0] == 'N':
+                wy += int(l[1:])
+            if l[0] == 'S':
+                wy -= int(l[1:])
+            if l[0] == 'E':
+                wx += int(l[1:])
+            if l[0] == 'W':
+                wx -= int(l[1:])
+
+            if l[0] == 'L':
+                wx, wy = rotate_waypoint(wx, wy, int(l[1:]))
+            if l[0] == 'R':
+                wx, wy = rotate_waypoint(wx, wy, 360 - int(l[1:]))
+
+            if l[0] == 'F':
+                sx += wx * int(l[1:])
+                sy += wy * int(l[1:])
+
+    return abs(sx) + abs(sy)
+
+
+def chdir(heading, deg):
+    compass = 'ENWS'
+    return compass[int((compass.index(heading) + deg / 360 * 4) % 4)]
+
+
+def rotate_waypoint(wx, wy, deg):
+    if deg == 90:
+        return -wy, wx
+    if deg == 180:
+        return -wx, -wy
+    if deg == 270:
+        return wy, -wx
 
 
 # --- Day 13: Shuttle Search --- #
 def day13(inp, b=False):
     if not b:
-        delays = sorted([(int(x) - int(inp[0]) % int(x), int(x)) for x in inp[1].split(',') if x != 'x'], key=lambda x: x[0])
+        delays = sorted([(int(x) - int(inp[0]) % int(x), int(x)) for x in inp[1].split(',') if x != 'x'],
+                        key=lambda x: x[0])
         return delays[0][0] * delays[0][1]
     else:
         sched = {}
@@ -393,23 +459,22 @@ def convert_masks(s):
 
 def mask_with_floating_values(addr, m):
     addrs = []
-
     base_addr = list(format(addr | int(m.replace('X', '0'), 2), "036b"))
-
     floating_indices = [i for i, c in enumerate(m) if c == 'X']
-
     floating_values = product(range(2), repeat=m.count('X'))
 
     for i in floating_indices:
         base_addr[i] = '{}'
-
     masked_base_str = reduce(lambda x, y: x + y, base_addr)
 
     for v in floating_values:
-        masked_addr = masked_base_str.format(*v)
-        addrs.append(masked_addr)
-
+        addrs.append(masked_base_str.format(*v))
     return addrs
+
+
+# --- Day 15: ??? --- #
+def day15(inp, b=False):
+    return -1
 
 
 solutions = {
@@ -427,4 +492,5 @@ solutions = {
     12: day12,
     13: day13,
     14: day14,
+    15: day15,
 }

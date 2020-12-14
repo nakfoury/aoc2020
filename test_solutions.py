@@ -376,11 +376,20 @@ def test_day11b():
 
 
 def test_day12a():
-    assert solutions.day12([]) == -1
+    assert solutions.chdir('E', 90) == 'N'
+    assert solutions.day12(['F10',
+                            'N3',
+                            'F7',
+                            'R90',
+                            'F11', ]) == 25
 
 
 def test_day12b():
-    assert solutions.day12([], b=True) == -1
+    assert solutions.day12(['F10',
+                            'N3',
+                            'F7',
+                            'R90',
+                            'F11', ], b=True) == 286
 
 
 def test_day13a():
