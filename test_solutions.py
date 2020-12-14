@@ -389,7 +389,7 @@ def test_day13a():
 
 
 def test_day13b():
-    assert solutions.day13(['939','7,13,x,x,59,x,31,19', ], b=True) == 1068781
+    assert solutions.day13(['939', '7,13,x,x,59,x,31,19', ], b=True) == 1068781
 
 
 def test_day14a():
@@ -400,5 +400,7 @@ def test_day14a():
 
 
 def test_day14b():
-    assert solutions.day14([], b=True) == -1
-    assert solutions.day14([], b=True) == -1
+    assert solutions.day14(['mask = 000000000000000000000000000000X1001X',
+                            'mem[42] = 100',
+                            'mask = 00000000000000000000000000000000X0XX',
+                            'mem[26] = 1', ], b=True) == 208

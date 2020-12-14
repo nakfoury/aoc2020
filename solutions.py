@@ -2,6 +2,7 @@ import re
 import copy
 import numpy as np
 from functools import reduce
+from itertools import combinations_with_replacement, product
 
 import util
 
@@ -358,7 +359,6 @@ def find_mod_factor(n, mod, subprod):
     factor = 1
     congr = subprod % mod
     while True:
-        # if n % mod == (congr * factor) % mod:
         if (mod - (n % mod)) % mod == (congr * factor) % mod:
             return factor * subprod
         factor += 1
@@ -373,22 +373,43 @@ def day14(inp, b=False):
             if l[:4] == 'mask':
                 zeroes, ones = convert_masks(l[-36:])
             else:
-                # m = re.match(r'mem\[(\d+)\]', l)
                 mem[re.match(r'mem\[(\d+)\]', l).group(1)] = int(l.split(' = ')[1]) & zeroes | ones
-                continue
     else:
-        return -1
         for l in inp:
-            # TODO Solve 14b
-            return -1
+            if l[:4] == 'mask':
+                mask = l[-36:]
+            else:
+                addrs = mask_with_floating_values(int(re.match(r'mem\[(\d+)\]', l).group(1)), mask)
+                for addr in addrs:
+                    mem[addr] = int(l.split(' = ')[1])
     return sum(mem.values())
 
 
-def convert_masks(s, floating=False):
-    if not floating:
-        zeroes = int(s.replace('X', '1'), 2)
-        ones = int(s.replace('X', '0'), 2)
-        return zeroes, ones
+def convert_masks(s):
+    zeroes = int(s.replace('X', '1'), 2)
+    ones = int(s.replace('X', '0'), 2)
+    return zeroes, ones
+
+
+def mask_with_floating_values(addr, m):
+    addrs = []
+
+    base_addr = list(format(addr | int(m.replace('X', '0'), 2), "036b"))
+
+    floating_indices = [i for i, c in enumerate(m) if c == 'X']
+
+    floating_values = product(range(2), repeat=m.count('X'))
+
+    for i in floating_indices:
+        base_addr[i] = '{}'
+
+    masked_base_str = reduce(lambda x, y: x + y, base_addr)
+
+    for v in floating_values:
+        masked_addr = masked_base_str.format(*v)
+        addrs.append(masked_addr)
+
+    return addrs
 
 
 solutions = {
