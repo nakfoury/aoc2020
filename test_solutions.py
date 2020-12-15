@@ -413,3 +413,10 @@ def test_day14b():
                             'mem[42] = 100',
                             'mask = 00000000000000000000000000000000X0XX',
                             'mem[26] = 1', ], b=True) == 208
+
+def test_day15a():
+    assert solutions.day15(['0,3,6', ]) == 1
+
+
+def test_day15b():
+    assert solutions.day15(['1,3,2'], b=True) == 1

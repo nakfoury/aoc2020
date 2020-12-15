@@ -463,9 +463,13 @@ def mask_with_floating_values(addr, m):
     return addrs
 
 
-# --- Day 15: ??? --- #
+# --- Day 15: Rambunctious Recitation --- #
 def day15(inp, b=False):
-    return -1
+    numbers = list(map(int, inp[0].split(',')))
+    numbers.reverse()
+    while len(numbers) < 2020:
+        numbers.insert(0, numbers[1:].index(numbers[0]) + 1 if numbers[0] in numbers[1:] else 0)
+    return numbers[0]
 
 
 solutions = {
