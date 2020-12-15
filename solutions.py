@@ -2,7 +2,7 @@ import re
 import copy
 import numpy as np
 from functools import reduce
-from itertools import combinations_with_replacement, product
+from itertools import product
 
 import util
 
@@ -465,11 +465,30 @@ def mask_with_floating_values(addr, m):
 
 # --- Day 15: Rambunctious Recitation --- #
 def day15(inp, b=False):
-    numbers = list(map(int, inp[0].split(',')))
-    numbers.reverse()
-    while len(numbers) < 2020:
-        numbers.insert(0, numbers[1:].index(numbers[0]) + 1 if numbers[0] in numbers[1:] else 0)
-    return numbers[0]
+    if not b:
+        numbers = list(map(int, inp[0].split(',')))
+        numbers.reverse()
+        while len(numbers) < 2020:
+            numbers.insert(0, numbers[1:].index(numbers[0]) + 1 if numbers[0] in numbers[1:] else 0)
+        return numbers[0]
+    else:
+        numbers = {}
+        for i, n in enumerate(list(map(int, inp[0].split(',')))):
+            numbers[n] = i
+        n = 0
+        for i in range(len(numbers), 30000000 - 1):
+            if n in numbers:
+                tmp = i - numbers[n]
+                numbers[n] = i
+                n = tmp
+            else:
+                numbers[n] = i
+                n = 0
+        return n
+
+
+def day16(inp, b=False):
+    return -1
 
 
 solutions = {
@@ -488,4 +507,5 @@ solutions = {
     13: day13,
     14: day14,
     15: day15,
+    16: day16,
 }
