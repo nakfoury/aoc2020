@@ -414,17 +414,40 @@ def test_day14b():
                             'mask = 00000000000000000000000000000000X0XX',
                             'mem[26] = 1', ], b=True) == 208
 
-def test_day15a():
-    assert solutions.day15(['0,3,6']) == 436
 
-
-def test_day15b():
-    assert solutions.day15(['0,3,6'], b=True) == 175594
+# def test_day15a():
+#     assert solutions.day15(['0,3,6']) == 436
+#
+#
+# def test_day15b():
+#     assert solutions.day15(['0,3,6'], b=True) == 175594
 
 
 def test_day16a():
-    assert solutions.day16([]) == -1
+    assert solutions.day16(['class: 1-3 or 5-7',
+                            'row: 6-11 or 33-44',
+                            'seat: 13-40 or 45-50',
+                            '',
+                            'your ticket:',
+                            '7,1,14',
+                            '',
+                            'nearby tickets:',
+                            '7,3,47',
+                            '40,4,50',
+                            '55,2,20',
+                            '38,6,12', ]) == 71
 
 
 def test_day16b():
-    assert solutions.day16([], b=True) == -1
+    assert solutions.day16(['class: 1-3 or 5-7',
+                            'row: 6-11 or 33-44',
+                            'seat: 13-40 or 45-50',
+                            '',
+                            'your ticket:',
+                            '7,1,14',
+                            '',
+                            'nearby tickets:',
+                            '7,3,47',
+                            '40,4,50',
+                            '55,2,20',
+                            '38,6,12',], b=True) == -1

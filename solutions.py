@@ -487,8 +487,42 @@ def day15(inp, b=False):
         return n
 
 
+# --- Day 16: Ticket Translation --- #
 def day16(inp, b=False):
-    return -1
+    rules = []
+    tickets = []
+    l = 'foo'
+    while l != '':
+        l = inp.pop(0)
+        for r in re.findall(r'(\d+-\d+)', l):
+            rules.append(tuple(map(int,r.split('-'))))
+    inp.pop(0)
+    my_ticket = inp.pop(0)
+    inp.pop(0)
+    inp.pop(0)
+    for t in inp:
+        tickets.append(list(map(int, t.split(','))))
+    if not b:
+        result = 0
+        for ticket in tickets:
+            result += scan_ticket(rules, ticket)
+    else:
+        for ticket in tickets:
+            if scan_ticket(rules, ticket) != 0:
+                tickets.remove(ticket)
+    return result
+
+
+def scan_ticket(rules, ticket):
+    err = 0
+    for field in ticket:
+        valid = False
+        for rule in rules:
+            if field in range(rule[0], rule[1]+1):
+                valid = True
+        if not valid:
+            err += field
+    return err
 
 
 solutions = {
