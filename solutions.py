@@ -489,40 +489,109 @@ def day15(inp, b=False):
 
 # --- Day 16: Ticket Translation --- #
 def day16(inp, b=False):
-    rules = []
-    tickets = []
-    l = 'foo'
-    while l != '':
-        l = inp.pop(0)
-        for r in re.findall(r'(\d+-\d+)', l):
-            rules.append(tuple(map(int,r.split('-'))))
-    inp.pop(0)
-    my_ticket = inp.pop(0)
-    inp.pop(0)
-    inp.pop(0)
-    for t in inp:
-        tickets.append(list(map(int, t.split(','))))
     if not b:
-        result = 0
+        # rules = []
+        # tickets = []
+        # l = 'foo'
+        # while l != '':
+        #     l = inp.pop(0)
+        #     for r in re.findall(r'(\d+-\d+)', l):
+        #         rules.append(tuple(map(int,r.split('-'))))
+        # inp.pop(0)
+        # my_ticket = inp.pop(0)
+        rules = {}
+        tickets = []
+        l = inp.pop(0)
+        while l != '':
+            name, rs = tuple(l.split(':'))
+            rules[name] = [ tuple(map(int, x.split('-'))) for x in re.findall(r'(\d+-\d+)', rs) ]
+            l = inp.pop(0)
+        inp.pop(0)
+        my_ticket = list(map(int, inp.pop(0).split(',')))
+        inp.pop(0)
+        inp.pop(0)
+        for t in inp:
+            tickets.append(list(map(int, t.split(','))))
+            result = 0
         for ticket in tickets:
-            result += scan_ticket(rules, ticket)
+            err, _ = scan_ticket(rules, ticket)
+            result += err
     else:
+        rules = {}
+        tickets = []
+        l = inp.pop(0)
+        while l != '':
+            name, rs = tuple(l.split(':'))
+            rules[name] = [ tuple(map(int, x.split('-'))) for x in re.findall(r'(\d+-\d+)', rs) ]
+            l = inp.pop(0)
+        inp.pop(0)
+        my_ticket = list(map(int, inp.pop(0).split(',')))
+        inp.pop(0)
+        inp.pop(0)
+        for t in inp:
+            tickets.append(list(map(int, t.split(','))))
+        invalid_tickets = []
+        tickets.append(my_ticket)
+        # remove invalid tickets
         for ticket in tickets:
-            if scan_ticket(rules, ticket) != 0:
-                tickets.remove(ticket)
+            _, v = scan_ticket(rules, ticket)
+            if not v:
+                invalid_tickets.append(ticket)
+        for ticket in invalid_tickets:
+            tickets.remove(ticket)
+        # determine possible labels
+        valid_rules_by_index = {}
+        for i in range(len(my_ticket)):
+            valid_fields = [x for x in rules]
+            for rule in rules:
+                valid = True
+                for ticket in tickets:
+                    if not check_field(rules[rule], ticket[i]):
+                        valid = False
+                        break
+                if not valid:
+                    valid_fields.remove(rule)
+            valid_rules_by_index[i] = valid_fields
+        result = {}
+        # assign final labels
+        while True:
+            for i in valid_rules_by_index:
+                for r in result:
+                    if r in valid_rules_by_index[i]:
+                        valid_rules_by_index[i].remove(r)
+                if len(valid_rules_by_index[i]) == 1:
+                    result[valid_rules_by_index[i][0]] = i
+            if not any(valid_rules_by_index.values()):
+                break
+        result = reduce(lambda x,y: x*y, [my_ticket[result[x]] if 'departure' in x else 1 for x in result])
     return result
+
+
+def check_field(rule, field):
+    for rng in rule:
+        if field in range(int(rng[0]), int(rng[1]) + 1):
+            return True
+    return False
 
 
 def scan_ticket(rules, ticket):
     err = 0
+    valid_ticket = True
     for field in ticket:
         valid = False
         for rule in rules:
-            if field in range(rule[0], rule[1]+1):
-                valid = True
+            for rng in rules[rule]:
+                if field in range(int(rng[0]), int(rng[1])+1):
+                    valid = True
         if not valid:
             err += field
-    return err
+            valid_ticket = False
+    return err, valid_ticket
+
+
+# --- Day 17: ??? --- #
+def day17(inp, b=False):
+    return -1
 
 
 solutions = {
@@ -542,4 +611,5 @@ solutions = {
     14: day14,
     15: day15,
     16: day16,
+    17: day17,
 }
