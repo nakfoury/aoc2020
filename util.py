@@ -26,6 +26,16 @@ def adjacent_eight():
     return list(set(result))
 
 
+def adjacent_six_3d():
+    result = []
+    for i in [-1, 0, 1]:
+        for j in [-1, 0, 1]:
+            for k in [-1, 0, 1]:
+                result.append((i, j, k))
+    result.remove((0, 0, 0))
+    return list(set(result))
+
+
 def is_in_bounds(x, y, rows, cols):
     if x < 0 or x >= rows or y < 0 or y >= cols:
         return False

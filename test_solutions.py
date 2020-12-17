@@ -454,8 +454,10 @@ def test_day16a():
 
 
 def test_day17a():
-    assert solutions.day17([]) == -1
+    assert solutions.day17(['.#.',
+                            '..#',
+                            '###', ]) == 112
 
 
-def test_day17b():
-    assert solutions.day17([], b=False) == -1
+# def test_day17b():
+#     assert solutions.day17([], b=False) == -1

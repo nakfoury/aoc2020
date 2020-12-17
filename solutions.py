@@ -489,50 +489,28 @@ def day15(inp, b=False):
 
 # --- Day 16: Ticket Translation --- #
 def day16(inp, b=False):
-    if not b:
-        # rules = []
-        # tickets = []
-        # l = 'foo'
-        # while l != '':
-        #     l = inp.pop(0)
-        #     for r in re.findall(r'(\d+-\d+)', l):
-        #         rules.append(tuple(map(int,r.split('-'))))
-        # inp.pop(0)
-        # my_ticket = inp.pop(0)
-        rules = {}
-        tickets = []
+    rules = {}
+    tickets = []
+    l = inp.pop(0)
+    while l != '':
+        name, rs = tuple(l.split(':'))
+        rules[name] = [ tuple(map(int, x.split('-'))) for x in re.findall(r'(\d+-\d+)', rs) ]
         l = inp.pop(0)
-        while l != '':
-            name, rs = tuple(l.split(':'))
-            rules[name] = [ tuple(map(int, x.split('-'))) for x in re.findall(r'(\d+-\d+)', rs) ]
-            l = inp.pop(0)
-        inp.pop(0)
-        my_ticket = list(map(int, inp.pop(0).split(',')))
-        inp.pop(0)
-        inp.pop(0)
-        for t in inp:
-            tickets.append(list(map(int, t.split(','))))
-            result = 0
+    inp.pop(0)
+    my_ticket = list(map(int, inp.pop(0).split(',')))
+    inp.pop(0)
+    inp.pop(0)
+    for t in inp:
+        tickets.append(list(map(int, t.split(','))))
+    if not b:
+        result = 0
         for ticket in tickets:
             err, _ = scan_ticket(rules, ticket)
             result += err
     else:
-        rules = {}
-        tickets = []
-        l = inp.pop(0)
-        while l != '':
-            name, rs = tuple(l.split(':'))
-            rules[name] = [ tuple(map(int, x.split('-'))) for x in re.findall(r'(\d+-\d+)', rs) ]
-            l = inp.pop(0)
-        inp.pop(0)
-        my_ticket = list(map(int, inp.pop(0).split(',')))
-        inp.pop(0)
-        inp.pop(0)
-        for t in inp:
-            tickets.append(list(map(int, t.split(','))))
-        invalid_tickets = []
         tickets.append(my_ticket)
         # remove invalid tickets
+        invalid_tickets = []
         for ticket in tickets:
             _, v = scan_ticket(rules, ticket)
             if not v:
@@ -589,9 +567,53 @@ def scan_ticket(rules, ticket):
     return err, valid_ticket
 
 
-# --- Day 17: ??? --- #
+# --- Day 17: Conway Cubes --- #
 def day17(inp, b=False):
-    return -1
+    cubes = np.full((20,20,20), '.')
+    for i, l in enumerate(inp):
+        cubes[9][5+i][5:5+len(l)] = [c for c in l]
+
+    for i in range(6):
+        flips = get_flips(cubes)
+        apply_flips(cubes, flips)
+    return count_hashes(cubes)
+
+
+def get_flips(cubes):
+    neighbors = util.adjacent_six_3d()
+    flips = []
+    for a, layer in enumerate(cubes):
+        for b, row in enumerate(layer):
+            for c, col in enumerate(row):
+                hashes = 0
+                for n in neighbors:
+                    if a + n[0] < 0 or b + n[1] < 0 or c + n[2] < 0:
+                        continue
+                    if a + n[0] >= 20 or b + n[1] >= 20 or c + n[2] >= 20:
+                        continue
+                    if cubes[a + n[0]][b + n[1]][c + n[2]] == '#':
+                        hashes += 1
+                if cubes[a][b][c] == '.' and hashes == 3:
+                    flips.append((a, b, c))
+                elif cubes[a][b][c] == '#' and hashes != 2 and hashes != 3:
+                    flips.append((a, b, c))
+    return flips
+
+
+def apply_flips(cubes, flips):
+    for flip in flips:
+        cubes[flip[0]][flip[1]][flip[2]] = '.' if cubes[flip[0]][flip[1]][flip[2]] == '#' else '#'
+    return cubes
+
+
+def count_hashes(cubes):
+    hashes = 0
+    for layer in cubes:
+        for row in layer:
+            for col in row:
+                if col == '#':
+                    hashes += 1
+    return hashes
 
 
 solutions = {
