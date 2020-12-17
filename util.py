@@ -26,13 +26,24 @@ def adjacent_eight():
     return list(set(result))
 
 
-def adjacent_six_3d():
+def adjacent_cells_3d():
     result = []
     for i in [-1, 0, 1]:
         for j in [-1, 0, 1]:
             for k in [-1, 0, 1]:
                 result.append((i, j, k))
     result.remove((0, 0, 0))
+    return list(set(result))
+
+
+def adjacent_cells_4d():
+    result = []
+    for i in [-1, 0, 1]:
+        for j in [-1, 0, 1]:
+            for k in [-1, 0, 1]:
+                for l in [-1, 0, 1]:
+                    result.append((i, j, k, l))
+    result.remove((0, 0, 0, 0))
     return list(set(result))
 
 

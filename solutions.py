@@ -494,7 +494,7 @@ def day16(inp, b=False):
     l = inp.pop(0)
     while l != '':
         name, rs = tuple(l.split(':'))
-        rules[name] = [ tuple(map(int, x.split('-'))) for x in re.findall(r'(\d+-\d+)', rs) ]
+        rules[name] = [tuple(map(int, x.split('-'))) for x in re.findall(r'(\d+-\d+)', rs)]
         l = inp.pop(0)
     inp.pop(0)
     my_ticket = list(map(int, inp.pop(0).split(',')))
@@ -541,7 +541,7 @@ def day16(inp, b=False):
                     result[valid_rules_by_index[i][0]] = i
             if not any(valid_rules_by_index.values()):
                 break
-        result = reduce(lambda x,y: x*y, [my_ticket[result[x]] if 'departure' in x else 1 for x in result])
+        result = reduce(lambda x, y: x * y, [my_ticket[result[x]] if 'departure' in x else 1 for x in result])
     return result
 
 
@@ -559,7 +559,7 @@ def scan_ticket(rules, ticket):
         valid = False
         for rule in rules:
             for rng in rules[rule]:
-                if field in range(int(rng[0]), int(rng[1])+1):
+                if field in range(int(rng[0]), int(rng[1]) + 1):
                     valid = True
         if not valid:
             err += field
@@ -569,51 +569,84 @@ def scan_ticket(rules, ticket):
 
 # --- Day 17: Conway Cubes --- #
 def day17(inp, b=False):
-    cubes = np.full((20,20,20), '.')
-    for i, l in enumerate(inp):
-        cubes[9][5+i][5:5+len(l)] = [c for c in l]
+    if not b:
+        cubes = np.full((20, 20, 20), '.')
+        for i, l in enumerate(inp):
+            cubes[9][5 + i][5:5 + len(l)] = [c for c in l]
+    else:
+        cubes = np.full((20, 20, 20, 20), '.')
+        for i, l in enumerate(inp):
+            cubes[9][9][5 + i][5:5 + len(l)] = [c for c in l]
 
     for i in range(6):
-        flips = get_flips(cubes)
-        apply_flips(cubes, flips)
-    return count_hashes(cubes)
+        flips = get_flips(cubes, b)
+        apply_flips(cubes, flips, b)
+    return count_hashes(cubes, b)
 
 
-def get_flips(cubes):
-    neighbors = util.adjacent_six_3d()
+def get_flips(cubes, part2=False):
+    neighbors = util.adjacent_cells_3d() if not part2 else util.adjacent_cells_4d()
     flips = []
-    for a, layer in enumerate(cubes):
-        for b, row in enumerate(layer):
-            for c, col in enumerate(row):
-                hashes = 0
-                for n in neighbors:
-                    if a + n[0] < 0 or b + n[1] < 0 or c + n[2] < 0:
-                        continue
-                    if a + n[0] >= 20 or b + n[1] >= 20 or c + n[2] >= 20:
-                        continue
-                    if cubes[a + n[0]][b + n[1]][c + n[2]] == '#':
-                        hashes += 1
-                if cubes[a][b][c] == '.' and hashes == 3:
-                    flips.append((a, b, c))
-                elif cubes[a][b][c] == '#' and hashes != 2 and hashes != 3:
-                    flips.append((a, b, c))
+    for a in range(len(cubes)):
+        for b in range(len(cubes)):
+            for c in range(len(cubes)):
+                if part2:
+                    for d in range(len(cubes)):
+                        hashes = 0
+                        for n in neighbors:
+                            if a + n[0] < 0 or b + n[1] < 0 or c + n[2] < 0 or d + n[3] < 0:
+                                continue
+                            if a + n[0] >= 20 or b + n[1] >= 20 or c + n[2] >= 20 or d + n[3] >= 20:
+                                continue
+                            if cubes[a + n[0]][b + n[1]][c + n[2]][d + n[3]] == '#':
+                                hashes += 1
+                        if cubes[a][b][c][d] == '.' and hashes == 3:
+                            flips.append((a, b, c, d))
+                        elif cubes[a][b][c][d] == '#' and hashes != 2 and hashes != 3:
+                            flips.append((a, b, c, d))
+                else:
+                    hashes = 0
+                    for n in neighbors:
+                        if a + n[0] < 0 or b + n[1] < 0 or c + n[2] < 0:
+                            continue
+                        if a + n[0] >= 20 or b + n[1] >= 20 or c + n[2] >= 20:
+                            continue
+                        if cubes[a + n[0]][b + n[1]][c + n[2]] == '#':
+                            hashes += 1
+                    if cubes[a][b][c] == '.' and hashes == 3:
+                        flips.append((a, b, c))
+                    elif cubes[a][b][c] == '#' and hashes != 2 and hashes != 3:
+                        flips.append((a, b, c))
     return flips
 
 
-def apply_flips(cubes, flips):
-    for flip in flips:
-        cubes[flip[0]][flip[1]][flip[2]] = '.' if cubes[flip[0]][flip[1]][flip[2]] == '#' else '#'
+def apply_flips(cubes, flips, b=False):
+    if not b:
+        for flip in flips:
+            cubes[flip[0]][flip[1]][flip[2]] = '.' if cubes[flip[0]][flip[1]][flip[2]] == '#' else '#'
+    else:
+        for flip in flips:
+            cubes[flip[0]][flip[1]][flip[2]][flip[3]] = '.' if cubes[flip[0]][flip[1]][flip[2]][flip[3]] == '#' else '#'
     return cubes
 
 
-def count_hashes(cubes):
+def count_hashes(cubes, b=False):
     hashes = 0
     for layer in cubes:
         for row in layer:
             for col in row:
-                if col == '#':
+                if b:
+                    for h in col:
+                        if h == '#':
+                            hashes += 1
+                elif col == '#':
                     hashes += 1
     return hashes
+
+
+# --- Day 18: ??? --- #
+def day18(inp, b=False):
+    return -1
 
 
 solutions = {
@@ -634,4 +667,5 @@ solutions = {
     15: day15,
     16: day16,
     17: day17,
+    18: day18,
 }

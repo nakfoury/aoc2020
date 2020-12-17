@@ -459,5 +459,15 @@ def test_day17a():
                             '###', ]) == 112
 
 
-# def test_day17b():
-#     assert solutions.day17([], b=False) == -1
+def test_day17b():
+    assert solutions.day17(['.#.',
+                            '..#',
+                            '###', ], b=True) == 848
+
+
+def test_day18a():
+    assert solutions.day18([]) == -1
+
+
+def test_day18b():
+    assert solutions.day18([], b=True) == -1
