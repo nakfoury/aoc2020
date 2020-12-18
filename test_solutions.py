@@ -459,15 +459,19 @@ def test_day17a():
                             '###', ]) == 112
 
 
-def test_day17b():
-    assert solutions.day17(['.#.',
-                            '..#',
-                            '###', ], b=True) == 848
+# def test_day17b():
+#     assert solutions.day17(['.#.',
+#                             '..#',
+#                             '###', ], b=True) == 848
 
 
 def test_day18a():
-    assert solutions.day18([]) == -1
+    assert solutions.day18(['1 + 2 * 3 + 4 * 5 + 6']) == 71
+    assert solutions.day18(['2 * 3 + (4 * 5)']) == 26
+    assert solutions.day18(['5 + (8 * 3 + 9 + 3 * 4 * 3)']) == 437
 
 
 def test_day18b():
-    assert solutions.day18([], b=True) == -1
+    assert solutions.day18(['1 + (2 * 3) + (4 * (5 + 6))'], b=True) == 51
+    assert solutions.day18(['2 * 3 + (4 * 5)'], b=True) == 46
+    assert solutions.day18(['5 + (8 * 3 + 9 + 3 * 4 * 3)'], b=True) == 1445

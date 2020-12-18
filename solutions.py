@@ -644,8 +644,41 @@ def count_hashes(cubes, b=False):
     return hashes
 
 
-# --- Day 18: ??? --- #
+# --- Day 18: Operation Order --- #
 def day18(inp, b=False):
+    problems = [bytearray(l, 'UTF-8') for l in inp]
+    result = 0
+    for p in problems:
+        result += int(evaluate(p, b))
+    return result
+
+
+def evaluate(exp, b):
+    m = re.search(r'(\([^\(]*?\))', exp.decode())
+    while m:
+        exp[m.start():m.end()] = evaluate(bytearray(m.group(0)[1:-1], 'UTF-8'), b)
+        m = re.search(r'(\([^\(]*?\))', exp.decode())
+
+    if not b:
+        m = re.search(r'(\d+ [\*\+] \d+)', exp.decode())
+        while m:
+            exp[m.start():m.end()] = bytearray(str(eval(m.group(0))), 'UTF-8')
+            m = re.search(r'(\d+ [\*\+] \d+)', exp.decode())
+
+    else:
+        m = re.search(r'(\d+ [\+] \d+)', exp.decode())
+        while m:
+            exp[m.start():m.end()] = bytearray(str(eval(m.group(0))), 'UTF-8')
+            m = re.search(r'(\d+ [\+] \d+)', exp.decode())
+        m = re.search(r'(\d+ [\*] \d+)', exp.decode())
+        while m:
+            exp[m.start():m.end()] = bytearray(str(eval(m.group(0))), 'UTF-8')
+            m = re.search(r'(\d+ [\*] \d+)', exp.decode())
+
+    return exp
+
+
+def day19(inp, b=False):
     return -1
 
 
@@ -668,4 +701,5 @@ solutions = {
     16: day16,
     17: day17,
     18: day18,
+    19: day19,
 }
