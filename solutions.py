@@ -684,26 +684,21 @@ def day19(inp, b=False):
     rules = {}
     for l in inp[:inp.index('')]:
         rules[l.split(':')[0]] = l.split(': ')[1]
-    expand_rule(rules, '0', b)
+    m = re.search(r'\d+', rules['0'])
+    while m:
+        if b and m.group(0) == '8':
+            rules['0'] = rules['0'][:m.start()] + '(42+)' + rules['0'][m.end():]
+        elif b and m.group(0) == '11':
+            rules['0'] = rules['0'][:m.start()] + '(?P<recur>42 (?&recur)? 31)' + rules['0'][m.end():]
+        else:
+            rules['0'] = rules['0'][:m.start()] + '(' + rules[m.group(0)].strip('"') + ')' + rules['0'][m.end():]
+        m = re.search(r'\d+', rules['0'])
     exp = re.compile(rules['0'].replace(' ', '').encode('unicode-escape').decode())
     result = 0
     for l in inp[inp.index(''):]:
         if exp.fullmatch(l) != None:
             result += 1
     return result
-
-
-def expand_rule(rules, r, b):
-    m = re.search(r'\d+', rules[r])
-    while m:
-        if b and m.group(0) == '8':
-            rules[r] = rules[r][:m.start()] + '(42+)' + rules[r][m.end():]
-        elif b and m.group(0) == '11':
-            rules[r] = rules[r][:m.start()] + '(?P<recur>42 (?&recur)? 31)' + rules[r][m.end():]
-        else:
-            rules[r] = rules[r][:m.start()] + '(' + rules[m.group(0)].strip('"') + ')' + rules[r][m.end():]
-        m = re.search(r'\d+', rules[r])
-    return
 
 
 # --- Day 20: ??? --- #
