@@ -475,3 +475,33 @@ def test_day18b():
     assert solutions.day18(['1 + (2 * 3) + (4 * (5 + 6))'], b=True) == 51
     assert solutions.day18(['2 * 3 + (4 * 5)'], b=True) == 46
     assert solutions.day18(['5 + (8 * 3 + 9 + 3 * 4 * 3)'], b=True) == 1445
+
+
+def test_day19a():
+    assert solutions.day19(['0: 4 1 5',
+                            '1: 2 3 | 3 2',
+                            '2: 4 4 | 5 5',
+                            '3: 4 5 | 5 4',
+                            '4: "a"',
+                            '5: "b"',
+                            '',
+                            'ababbb',
+                            'bababa',
+                            'abbbab',
+                            'aaabbb',
+                            'aaaabbb',]) == 2
+
+
+# def test_day19b():
+#     assert solutions.day19(['0: 4 1 5',
+#                             '1: 2 3 | 3 2',
+#                             '2: 4 4 | 5 5',
+#                             '3: 4 5 | 5 4',
+#                             '4: "a"',
+#                             '5: "b"',
+#                             '',
+#                             'ababbb',
+#                             'bababa',
+#                             'abbbab',
+#                             'aaabbb',
+#                             'aaaabbb',], b) == -1

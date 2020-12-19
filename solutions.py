@@ -1,4 +1,5 @@
-import re
+# import re
+import regex as re
 import copy
 import numpy as np
 from functools import reduce
@@ -196,7 +197,7 @@ def day8(inp, b=False):
 
 
 def run_handheld(code):
-    accumulator, cptr, pptr = 0, 0, 0
+    accumulator, cptr = 0, 0
     visited = []
     while True:
         if cptr == len(code):
@@ -283,7 +284,7 @@ def day10(inp, b=False):
 # --- Day 11: Seating System --- #
 def day11(inp, b=False):
     chart = []
-    for i, l in enumerate(inp):
+    for l in inp:
         chart.append([c for c in l])
     chart = np.array(chart)
     while True:
@@ -678,7 +679,35 @@ def evaluate(exp, b):
     return exp
 
 
+# --- Day 19: Monster Messages --- #
 def day19(inp, b=False):
+    rules = {}
+    for l in inp[:inp.index('')]:
+        rules[l.split(':')[0]] = l.split(': ')[1]
+    expand_rule(rules, '0', b)
+    exp = re.compile(rules['0'].replace(' ', '').encode('unicode-escape').decode())
+    result = 0
+    for l in inp[inp.index(''):]:
+        if exp.fullmatch(l) != None:
+            result += 1
+    return result
+
+
+def expand_rule(rules, r, b):
+    m = re.search(r'\d+', rules[r])
+    while m:
+        if b and m.group(0) == '8':
+            rules[r] = rules[r][:m.start()] + '(42+)' + rules[r][m.end():]
+        elif b and m.group(0) == '11':
+            rules[r] = rules[r][:m.start()] + '(?P<recur>42 (?&recur)? 31)' + rules[r][m.end():]
+        else:
+            rules[r] = rules[r][:m.start()] + '(' + rules[m.group(0)].strip('"') + ')' + rules[r][m.end():]
+        m = re.search(r'\d+', rules[r])
+    return
+
+
+# --- Day 20: ??? --- #
+def day20(inp, b=False):
     return -1
 
 
@@ -702,4 +731,5 @@ solutions = {
     17: day17,
     18: day18,
     19: day19,
+    20: day20,
 }
