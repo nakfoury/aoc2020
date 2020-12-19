@@ -694,11 +694,7 @@ def day19(inp, b=False):
             rules['0'] = rules['0'][:m.start()] + '(' + rules[m.group(0)].strip('"') + ')' + rules['0'][m.end():]
         m = re.search(r'\d+', rules['0'])
     exp = re.compile(rules['0'].replace(' ', '').encode('unicode-escape').decode())
-    result = 0
-    for l in inp[inp.index(''):]:
-        if exp.fullmatch(l) != None:
-            result += 1
-    return result
+    return sum(1 for x in map(exp.fullmatch, inp[inp.index(''):]) if x != None)
 
 
 # --- Day 20: ??? --- #
