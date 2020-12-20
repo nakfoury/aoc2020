@@ -694,9 +694,36 @@ def day19(inp, b=False):
     return sum(1 for x in map(exp.fullmatch, inp[inp.index(''):]) if x != None)
 
 
-# --- Day 20: ??? --- #
+# --- Day 20: Jurassic Jigsaw --- #
 def day20(inp, b=False):
-    return -1
+    tiles = {}
+    while inp:
+        t = re.search(r'\d+', inp.pop(0)).group(0)
+        buf = []
+        while True:
+            l = inp.pop(0)
+            if l == '':
+                break
+            buf.append([c for c in l])
+        tiles[t] = np.array(buf)
+    if not b:
+        matches = count_matches_per_tile(tiles)
+    return matches
+
+
+def count_matches_per_tile(tiles):
+    matches = {}
+    for t1 in tiles:
+        edges = get_edges(tiles[t1])
+        for t2 in tiles:
+            if t1 == t2:
+                continue
+
+
+def get_edges(tile):
+    result = [tile[:,0], tile[0,:], tile[:,9], tile[9,:],
+    np.flipud(tile)[:,0], np.flipud(tiles[t1])[:,9],
+    np.fliplr(tiles[t1])[0,:], np.fliplr(tiles[t1])[9,0],]
 
 
 solutions = {
