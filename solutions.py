@@ -683,15 +683,17 @@ def day19(inp, b=False):
     rules = {}
     for l in inp[:inp.index('')]:
         rules[l.split(':')[0]] = l.split(': ')[1]
-    while m := re.search(r'\d+', rules['0']):
+    m = re.search(r'\d+', rules['0'])
+    while m:
         if b and m.group(0) == '8':
             rules['0'] = rules['0'][:m.start()] + '(42+)' + rules['0'][m.end():]
         elif b and m.group(0) == '11':
             rules['0'] = rules['0'][:m.start()] + '(?P<recur>42 (?&recur)? 31)' + rules['0'][m.end():]
         else:
             rules['0'] = rules['0'][:m.start()] + '(' + rules[m.group(0)].strip('"') + ')' + rules['0'][m.end():]
+        m = re.search(r'\d+', rules['0'])
     exp = re.compile(rules['0'].replace(' ', '').encode('unicode-escape').decode())
-    return sum(1 for x in map(exp.fullmatch, inp[inp.index(''):]) if x != None)
+    return sum(1 for x in map(exp.fullmatch, inp[inp.index(''):]) if x is not None)
 
 
 # --- Day 20: ??? --- #
