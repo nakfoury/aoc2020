@@ -3,6 +3,7 @@ import copy
 import numpy as np
 from functools import reduce
 from itertools import product
+from collections import defaultdict
 
 import util
 
@@ -683,13 +684,15 @@ def day19(inp, b=False):
     rules = {}
     for l in inp[:inp.index('')]:
         rules[l.split(':')[0]] = l.split(': ')[1]
-    while m := re.search(r'\d+', rules['0']):
+    m = re.search(r'\d+', rules['0'])
+    while m:
         if b and m.group(0) == '8':
             rules['0'] = rules['0'][:m.start()] + '(42+)' + rules['0'][m.end():]
         elif b and m.group(0) == '11':
             rules['0'] = rules['0'][:m.start()] + '(?P<recur>42 (?&recur)? 31)' + rules['0'][m.end():]
         else:
             rules['0'] = rules['0'][:m.start()] + '(' + rules[m.group(0)].strip('"') + ')' + rules['0'][m.end():]
+        m = re.search(r'\d+', rules['0'])
     exp = re.compile(rules['0'].replace(' ', '').encode('unicode-escape').decode())
     return sum(1 for x in map(exp.fullmatch, inp[inp.index(''):]) if x != None)
 
@@ -707,23 +710,34 @@ def day20(inp, b=False):
             buf.append([c for c in l])
         tiles[t] = np.array(buf)
     if not b:
+        result = 1
         matches = count_matches_per_tile(tiles)
-    return matches
+        for t in matches:
+            if matches[t] == 4:
+                result *= int(t)
+    return result
 
 
 def count_matches_per_tile(tiles):
-    matches = {}
+    matches = defaultdict(int)
     for t1 in tiles:
-        edges = get_edges(tiles[t1])
+        e1 = get_edges(tiles[t1])
         for t2 in tiles:
             if t1 == t2:
                 continue
+            e2 = get_edges(tiles[t2])
+            for edge1 in e1:
+                for edge2 in e2:
+                    if (edge1==edge2).all():
+                        matches[t1] += 1
+    return matches
+
 
 
 def get_edges(tile):
-    result = [tile[:,0], tile[0,:], tile[:,9], tile[9,:],
-    np.flipud(tile)[:,0], np.flipud(tiles[t1])[:,9],
-    np.fliplr(tiles[t1])[0,:], np.fliplr(tiles[t1])[9,0],]
+    result = [tile[:,0], tile[0,:], tile[:,9], tile[9,:]]
+    result += [np.flip(x) for x in result]
+    return result
 
 
 solutions = {
