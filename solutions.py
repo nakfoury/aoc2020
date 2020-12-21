@@ -3,6 +3,7 @@ import copy
 import numpy as np
 from functools import reduce
 from itertools import product
+from collections import defaultdict
 
 import util
 
@@ -696,9 +697,47 @@ def day19(inp, b=False):
     return sum(1 for x in map(exp.fullmatch, inp[inp.index(''):]) if x is not None)
 
 
-# --- Day 20: ??? --- #
+# --- Day 20: Jurassic Jigsaw --- #
 def day20(inp, b=False):
-    return -1
+    tiles = {}
+    while inp:
+        t = re.search(r'\d+', inp.pop(0)).group(0)
+        buf = []
+        while True:
+            l = inp.pop(0)
+            if l == '':
+                break
+            buf.append([c for c in l])
+        tiles[t] = np.array(buf)
+    if not b:
+        result = 1
+        matches = count_matches_per_tile(tiles)
+        for t in matches:
+            if matches[t] == 4:
+                result *= int(t)
+    return result
+
+
+def count_matches_per_tile(tiles):
+    matches = defaultdict(int)
+    for t1 in tiles:
+        e1 = get_edges(tiles[t1])
+        for t2 in tiles:
+            if t1 == t2:
+                continue
+            e2 = get_edges(tiles[t2])
+            for edge1 in e1:
+                for edge2 in e2:
+                    if (edge1==edge2).all():
+                        matches[t1] += 1
+    return matches
+
+
+
+def get_edges(tile):
+    result = [tile[:,0], tile[0,:], tile[:,9], tile[9,:]]
+    result += [np.flip(x) for x in result]
+    return result
 
 
 solutions = {
