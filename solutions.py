@@ -2,8 +2,8 @@ import regex as re
 import copy
 import numpy as np
 from functools import reduce
-from itertools import product
-from collections import defaultdict
+from itertools import product, chain
+from collections import defaultdict, Counter
 
 import util
 
@@ -699,6 +699,7 @@ def day19(inp, b=False):
 
 # --- Day 20: Jurassic Jigsaw --- #
 def day20(inp, b=False):
+    result = 0
     tiles = {}
     while inp:
         t = re.search(r'\d+', inp.pop(0)).group(0)
@@ -728,16 +729,56 @@ def count_matches_per_tile(tiles):
             e2 = get_edges(tiles[t2])
             for edge1 in e1:
                 for edge2 in e2:
-                    if (edge1==edge2).all():
+                    if (edge1 == edge2).all():
                         matches[t1] += 1
     return matches
 
 
-
 def get_edges(tile):
-    result = [tile[:,0], tile[0,:], tile[:,9], tile[9,:]]
+    result = [tile[:, 0], tile[0, :], tile[:, 9], tile[9, :]]
     result += [np.flip(x) for x in result]
     return result
+
+
+# --- Day 21: Allergen Assessment --- #
+def day21(inp, b=False):
+    allergens = {}
+    ingredients = Counter()
+    result = 0
+    for l in inp:
+        for a in re.search(r'\(contains (.+)\)', l).group(1).split(', '):
+            if a not in allergens:
+                allergens[a] = l[:l.index('(')].split()
+            else:
+                removals = []
+                for ing in allergens[a]:
+                    if ing not in l[:l.index('(')].split():
+                        removals.append(ing)
+                for r in removals:
+                    allergens[a].remove(r)
+        # count ingredients
+        ingredients.update(l[:l.index('(')].split())
+
+    solve_puzzle(allergens)
+
+    if not b:
+        all_allergens = list(set(chain.from_iterable(allergens.values())))
+        for ingredient in ingredients:
+            if ingredient not in all_allergens:
+                result += ingredients[ingredient]
+    else:
+        result = reduce(lambda x, y: x + ',' + y, [allergens[x][0] for x in sorted(allergens.keys())])
+    return result
+
+
+def solve_puzzle(d):
+    while any([len(d[x]) > 1 for x in d]):
+        for a in d:
+            all_elts = list(chain.from_iterable(d.values()))
+            for i in d[a]:
+                if all_elts.count(i) == 1:
+                    d[a] = [i]
+                    break
 
 
 solutions = {
@@ -761,4 +802,5 @@ solutions = {
     18: day18,
     19: day19,
     20: day20,
+    21: day21,
 }

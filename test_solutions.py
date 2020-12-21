@@ -489,7 +489,7 @@ def test_day19a():
                             'bababa',
                             'abbbab',
                             'aaabbb',
-                            'aaaabbb',]) == 2
+                            'aaaabbb', ]) == 2
 
 
 # def test_day19b():
@@ -505,3 +505,25 @@ def test_day19a():
 #                             'abbbab',
 #                             'aaabbb',
 #                             'aaaabbb',], b) == -1
+
+
+def test_day20a():
+    assert solutions.day20([]) == 1
+
+
+def test_day20b():
+    assert solutions.day20([], b=True) == 0
+
+
+def test_day21a():
+    assert solutions.day21(['mxmxvkd kfcds sqjhc nhms (contains dairy, fish)',
+                            'trh fvjkl sbzzf mxmxvkd (contains dairy)',
+                            'sqjhc fvjkl (contains soy)',
+                            'sqjhc mxmxvkd sbzzf (contains fish)', ]) == 5
+
+
+def test_day21b():
+    assert solutions.day21(['mxmxvkd kfcds sqjhc nhms (contains dairy, fish)',
+                            'trh fvjkl sbzzf mxmxvkd (contains dairy)',
+                            'sqjhc fvjkl (contains soy)',
+                            'sqjhc mxmxvkd sbzzf (contains fish)', ], b=True) == 'mxmxvkd,sqjhc,fvjkl'
