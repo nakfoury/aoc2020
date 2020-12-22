@@ -558,4 +558,12 @@ def test_day22b():
                             '8',
                             '4',
                             '7',
-                            '10',], b=True) == 291
+                            '10', ], b=True) == 291
+
+
+def test_day23a():
+    assert solutions.day23([]) == -1
+
+
+def test_day23b():
+    assert solutions.day23([], b=True) == -1
