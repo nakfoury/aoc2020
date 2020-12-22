@@ -527,3 +527,23 @@ def test_day21b():
                             'trh fvjkl sbzzf mxmxvkd (contains dairy)',
                             'sqjhc fvjkl (contains soy)',
                             'sqjhc mxmxvkd sbzzf (contains fish)', ], b=True) == 'mxmxvkd,sqjhc,fvjkl'
+
+
+def test_day22a():
+    assert solutions.day22(['Player 1:',
+                            '9',
+                            '2',
+                            '6',
+                            '3',
+                            '1',
+                            '',
+                            'Player 2:',
+                            '5',
+                            '8',
+                            '4',
+                            '7',
+                            '10', ]) == 306
+
+
+def test_day22b():
+    assert solutions.day22([], b=True) == -1

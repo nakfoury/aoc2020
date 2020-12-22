@@ -756,10 +756,7 @@ def day21(inp, b=False):
                         removals.append(ing)
                 for r in removals:
                     allergens[a].remove(r)
-        # count ingredients
         ingredients.update(l[:l.index('(')].split())
-
-    solve_puzzle(allergens)
 
     if not b:
         all_allergens = list(set(chain.from_iterable(allergens.values())))
@@ -767,6 +764,7 @@ def day21(inp, b=False):
             if ingredient not in all_allergens:
                 result += ingredients[ingredient]
     else:
+        solve_puzzle(allergens)
         result = reduce(lambda x, y: x + ',' + y, [allergens[x][0] for x in sorted(allergens.keys())])
     return result
 
@@ -779,6 +777,42 @@ def solve_puzzle(d):
                 if all_elts.count(i) == 1:
                     d[a] = [i]
                     break
+
+
+# --- Day 22: Crab Combat --- #
+def day22(inp, b=False):
+    p1deck = inp[inp.index('Player 1:')+1:inp.index('')]
+    p2deck = inp[inp.index('Player 2:')+1:]
+    previous_states = []
+    while True:
+        if not b:
+            if p1deck == []:
+                return score(p2deck)
+            elif p2deck == []:
+                return score(p1deck)
+        if b:
+            if (p1deck, p2deck) in previous_states:
+                return score(p1deck)
+        combat_round(p1deck, p2deck)
+        previous_states.append((p1deck, p2deck))
+
+
+def score(deck):
+    deck.reverse()
+    return sum([i * int(x) for i, x in enumerate(deck, start=1)])
+
+
+def combat_round(p1, p2):
+    p1card = p1.pop(0)
+    p2card = p2.pop(0)
+    if int(p1card) > int(p2card):
+        p1.append(p1card)
+        p1.append(p2card)
+    else:
+        p2.append(p2card)
+        p2.append(p1card)
+
+    return
 
 
 solutions = {
@@ -803,4 +837,5 @@ solutions = {
     19: day19,
     20: day20,
     21: day21,
+    22: day22,
 }
