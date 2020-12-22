@@ -781,25 +781,66 @@ def solve_puzzle(d):
 
 # --- Day 22: Crab Combat --- #
 def day22(inp, b=False):
-    p1deck = inp[inp.index('Player 1:')+1:inp.index('')]
-    p2deck = inp[inp.index('Player 2:')+1:]
+    p1deck = list(map(int, inp[inp.index('Player 1:') + 1:inp.index('')]))
+    p2deck = list(map(int, inp[inp.index('Player 2:') + 1:]))
     previous_states = []
-    while True:
-        if not b:
+    if not b:
+        while True:
             if p1deck == []:
                 return score(p2deck)
             elif p2deck == []:
                 return score(p1deck)
-        if b:
-            if (p1deck, p2deck) in previous_states:
+            combat_round(p1deck, p2deck)
+    else:
+        while True:
+            if (str(p1deck), str(p2deck)) in previous_states:
                 return score(p1deck)
-        combat_round(p1deck, p2deck)
-        previous_states.append((p1deck, p2deck))
+            previous_states.append((str(p1deck), str(p2deck)))
+            if p1deck == []:
+                return score(p2deck)
+            elif p2deck == []:
+                return score(p1deck)
+            elif p1deck[0] > len(p1deck[1:]) or p2deck[0] > len(p2deck[1:]):
+                combat_round(p1deck, p2deck)
+            else:
+                p1card = p1deck.pop(0)
+                p2card = p2deck.pop(0)
+                winner = recursive_combat_game(copy.copy(p1deck[:p1card]), copy.copy(p2deck[:p2card]))
+                if winner == 'p1':
+                    p1deck.append(p1card)
+                    p1deck.append(p2card)
+                if winner == 'p2':
+                    p2deck.append(p2card)
+                    p2deck.append(p1card)
+
+
+def recursive_combat_game(p1deck, p2deck):
+    previous_states = []
+    while True:
+        if (str(p1deck), str(p2deck)) in previous_states:
+            return 'p1'
+        previous_states.append((str(p1deck), str(p2deck)))
+        if p1deck == []:
+            return 'p2'
+        elif p2deck == []:
+            return 'p1'
+        if p1deck[0] > len(p1deck[1:]) or p2deck[0] > len(p2deck[1:]):
+            combat_round(p1deck, p2deck)
+        else:
+            p1card = p1deck.pop(0)
+            p2card = p2deck.pop(0)
+            winner = recursive_combat_game(copy.copy(p1deck[:p1card]), copy.copy(p2deck[:p2card]))
+            if winner == 'p1':
+                p1deck.append(p1card)
+                p1deck.append(p2card)
+            if winner == 'p2':
+                p2deck.append(p2card)
+                p2deck.append(p1card)
 
 
 def score(deck):
     deck.reverse()
-    return sum([i * int(x) for i, x in enumerate(deck, start=1)])
+    return sum([i * x for i, x in enumerate(deck, start=1)])
 
 
 def combat_round(p1, p2):
@@ -811,8 +852,6 @@ def combat_round(p1, p2):
     else:
         p2.append(p2card)
         p2.append(p1card)
-
-    return
 
 
 solutions = {
