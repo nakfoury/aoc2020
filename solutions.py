@@ -839,9 +839,34 @@ def recursive_combat_round(p1deck, p2deck):
             p2deck.append(p1card)
 
 
-# --- Day 23: ??? --- #
+# --- Day 23: Crab Cups --- #
 def day23(inp, b=False):
-    return -1
+    cups = list(map(int, [c for c in inp[0]]))
+    num_cups = len(cups)
+    cur_cup = cups[0]
+    num_moves = 100
+    for _ in range(num_moves):
+        # cur_cup = cups[i % num_cups]
+        i = cups.index(cur_cup)
+        three_cups = []
+        for j in range(i + 1, i + 4):
+            three_cups.append(cups[j % num_cups])
+        for cup in three_cups:
+            cups.remove(cup)
+        dest_cup = get_dest_cup(cups, cur_cup)
+        three_cups.reverse()
+        for cup in three_cups:
+            cups.insert((cups.index(dest_cup)+1) % num_cups, cup)
+        cur_cup = cups[(cups.index(cur_cup) + 1) % num_cups]
+    return ''.join(list(map(str, cups)))
+
+
+def get_dest_cup(cups, cur_cup):
+    cup_values = sorted(cups, reverse=True)
+    if cup_values.index(cur_cup) == len(cup_values) - 1:
+        return cup_values[0]
+    else:
+        return cup_values[cup_values.index(cur_cup) + 1]
 
 
 solutions = {
@@ -867,4 +892,5 @@ solutions = {
     20: day20,
     21: day21,
     22: day22,
+    23: day23,
 }

@@ -562,7 +562,7 @@ def test_day22b():
 
 
 def test_day23a():
-    assert solutions.day23([]) == -1
+    assert solutions.day23(['389125467']) == '67384529'
 
 
 def test_day23b():
