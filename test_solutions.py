@@ -567,3 +567,49 @@ def test_day23a():
 
 def test_day23b():
     assert solutions.day23([], b=True) == -1
+
+
+def test_day24a():
+    assert solutions.day24(['sesenwnenenewseeswwswswwnenewsewsw',
+                            'neeenesenwnwwswnenewnwwsewnenwseswesw',
+                            'seswneswswsenwwnwse',
+                            'nwnwneseeswswnenewneswwnewseswneseene',
+                            'swweswneswnenwsewnwneneseenw',
+                            'eesenwseswswnenwswnwnwsewwnwsene',
+                            'sewnenenenesenwsewnenwwwse',
+                            'wenwwweseeeweswwwnwwe',
+                            'wsweesenenewnwwnwsenewsenwwsesesenwne',
+                            'neeswseenwwswnwswswnw',
+                            'nenwswwsewswnenenewsenwsenwnesesenew',
+                            'enewnwewneswsewnwswenweswnenwsenwsw',
+                            'sweneswneswneneenwnewenewwneswswnese',
+                            'swwesenesewenwneswnwwneseswwne',
+                            'enesenwswwswneneswsenwnewswseenwsese',
+                            'wnwnesenesenenwwnenwsewesewsesesew',
+                            'nenewswnwewswnenesenwnesewesw',
+                            'eneswnwswnwsenenwnwnwwseeswneewsenese',
+                            'neswnwewnwnwseenwseesewsenwsweewe',
+                            'wseweeenwnesenwwwswnew', ]) == 10
+
+
+def test_day24b():
+    assert solutions.day24(['sesenwnenenewseeswwswswwnenewsewsw',
+                            'neeenesenwnwwswnenewnwwsewnenwseswesw',
+                            'seswneswswsenwwnwse',
+                            'nwnwneseeswswnenewneswwnewseswneseene',
+                            'swweswneswnenwsewnwneneseenw',
+                            'eesenwseswswnenwswnwnwsewwnwsene',
+                            'sewnenenenesenwsewnenwwwse',
+                            'wenwwweseeeweswwwnwwe',
+                            'wsweesenenewnwwnwsenewsenwwsesesenwne',
+                            'neeswseenwwswnwswswnw',
+                            'nenwswwsewswnenenewsenwsenwnesesenew',
+                            'enewnwewneswsewnwswenweswnenwsenwsw',
+                            'sweneswneswneneenwnewenewwneswswnese',
+                            'swwesenesewenwneswnwwneseswwne',
+                            'enesenwswwswneneswsenwnewswseenwsese',
+                            'wnwnesenesenenwwnenwsewesewsesesew',
+                            'nenewswnwewswnenesenwnesewesw',
+                            'eneswnwswnwsenenwnwnwwseeswneewsenese',
+                            'neswnwewnwnwseenwseesewsenwsweewe',
+                            'wseweeenwnesenwwwswnew',], b=True) == 2208

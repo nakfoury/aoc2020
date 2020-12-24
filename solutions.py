@@ -869,6 +869,122 @@ def get_dest_cup(cups, cur_cup):
         return cup_values[cup_values.index(cur_cup) + 1]
 
 
+# class Cup:
+#     def __init__(self, id):
+#         self.id = id
+#         self.clockwise = None
+#         self.counterclockwise = None
+#
+#
+# class DLL:
+#     def __init__(self, input):
+#         self.current_cup = None
+#         m = map(Cup, input)
+#
+#
+#
+#     def insert(self, id, index):
+#         if self.current_cup == None:
+#             new_cup = Cup(id)
+#             return
+#
+#
+# # def day23(inp, b=False):
+# #     cups = {}
+# #     input_cups = [c for c in inp[0]]
+# #     for i in range(len(input_cups)):
+# #         if i + 1 >= len(input_cups):
+# #             cups[i] = None
+# #         else:
+# #             cups[i] = input_cups[i+1]
+# #     for j in range(len(input_cups, 1000000)):
+# #
+
+
+# --- Day 24: Lobby Layout --- #
+def day24(inp, b=False):
+    black_tiles = []
+    for l in inp:
+        (x, y) = flip_tile(l)
+        if (x, y) in black_tiles:
+            black_tiles.remove((x, y))
+        else:
+            black_tiles.append((x, y))
+    if b:
+        for _ in range(100):
+            flip_tiles(black_tiles)
+    return len(black_tiles)
+
+
+def flip_tile(inst):
+    x, y = 0, 0
+    while inst != '':
+        if inst[0] == 'e':
+            x += 1
+            inst = inst[1:]
+        elif inst[0] == 'w':
+            x -= 1
+            inst = inst[1:]
+        elif inst[:2] == 'ne':
+            if y % 2 == 1:
+                x += 1
+            y -= 1
+            inst = inst[2:]
+        elif inst[:2] == 'nw':
+            if y % 2 == 0:
+                x -= 1
+            y -= 1
+            inst = inst[2:]
+        elif inst[:2] == 'se':
+            if y % 2 == 1:
+                x += 1
+            y += 1
+            inst = inst[2:]
+        elif inst[:2] == 'sw':
+            if y % 2 == 0:
+                x -= 1
+            y += 1
+            inst = inst[2:]
+    return x, y
+
+
+def flip_tiles(black_tiles):
+    new_flips = []
+    white_tiles = []
+
+    for x, y in black_tiles:
+        neighbors = 0
+        for n in hex_neighbors(x, y):
+            if n in black_tiles:
+                neighbors += 1
+            elif n not in white_tiles:
+                white_tiles.append(n)
+        if neighbors == 0 or neighbors > 2:
+            new_flips.append((x, y))
+
+    for x, y in white_tiles:
+        neighbors = 0
+        for n in hex_neighbors(x, y):
+            if n in black_tiles:
+                neighbors += 1
+        if neighbors == 2:
+            new_flips.append((x, y))
+
+    for flip in new_flips:
+        if flip in black_tiles:
+            black_tiles.remove(flip)
+        else:
+            black_tiles.append(flip)
+    return
+
+
+def hex_neighbors(x, y):
+    if y % 2 == 0:
+        return [(x-1, y), (x+1, y), (x-1, y-1), (x-1, y+1), (x, y+1), (x, y-1)]
+    else:
+        return [(x-1, y), (x+1, y), (x, y-1), (x, y+1), (x+1, y+1), (x+1, y-1)]
+
+
 solutions = {
     1: day1,
     2: day2,
@@ -893,4 +1009,5 @@ solutions = {
     21: day21,
     22: day22,
     23: day23,
+    24: day24,
 }
