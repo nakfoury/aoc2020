@@ -841,64 +841,107 @@ def recursive_combat_round(p1deck, p2deck):
 
 # --- Day 23: Crab Cups --- #
 def day23(inp, b=False):
-    cups = list(map(int, [c for c in inp[0]]))
-    num_cups = len(cups)
-    cur_cup = cups[0]
-    num_moves = 100
-    for _ in range(num_moves):
-        # cur_cup = cups[i % num_cups]
-        i = cups.index(cur_cup)
-        three_cups = []
-        for j in range(i + 1, i + 4):
-            three_cups.append(cups[j % num_cups])
-        for cup in three_cups:
-            cups.remove(cup)
-        dest_cup = get_dest_cup(cups, cur_cup)
-        three_cups.reverse()
-        for cup in three_cups:
-            cups.insert((cups.index(dest_cup)+1) % num_cups, cup)
-        cur_cup = cups[(cups.index(cur_cup) + 1) % num_cups]
-    return ''.join(list(map(str, cups)))
-
-
-def get_dest_cup(cups, cur_cup):
-    cup_values = sorted(cups, reverse=True)
-    if cup_values.index(cur_cup) == len(cup_values) - 1:
-        return cup_values[0]
+    if not b:
+        cups = [int(c) for c in inp[0]]
     else:
-        return cup_values[cup_values.index(cur_cup) + 1]
+        cups = [int(c) for c in range(1, 1000001)]
+        cups[:len(inp[0])] = [int(c) for c in inp[0]]
+    cups.reverse()
+    cups = DLL(cups)
+    rounds = 100 if not b else 10000000
+    for _ in range(rounds):
+        cups.pick_up_cups()
+        cups.choose_destination()
+        cups.place_cups()
+        cups.rotate_clockwise()
+    return cups.print_cups(b)
 
 
-# class Cup:
-#     def __init__(self, id):
-#         self.id = id
-#         self.clockwise = None
-#         self.counterclockwise = None
-#
-#
-# class DLL:
-#     def __init__(self, input):
-#         self.current_cup = None
-#         m = map(Cup, input)
-#
-#
-#
-#     def insert(self, id, index):
-#         if self.current_cup == None:
-#             new_cup = Cup(id)
-#             return
-#
-#
-# # def day23(inp, b=False):
-# #     cups = {}
-# #     input_cups = [c for c in inp[0]]
-# #     for i in range(len(input_cups)):
-# #         if i + 1 >= len(input_cups):
-# #             cups[i] = None
-# #         else:
-# #             cups[i] = input_cups[i+1]
-# #     for j in range(len(input_cups, 1000000)):
-# #
+class Cup:
+    def __init__(self, id):
+        self.id = id
+        self.next = None
+        self.prev = None
+
+
+class DLL:
+    def __init__(self, inp) -> object:
+        self.current_cup = None
+        self.held_cups = []
+        self.destination_id = None
+        self.lowest_cup = min(inp)
+        self.highest_cup = max(inp)
+        self.tail = None
+        self.cup_table = {}
+        for cup in inp:
+            self.insert_at_head(cup)
+
+    def print_cups(self, b=False):
+        if b:
+            first = self.get_cup_by_id(1)
+            return first.next.id * first.next.next.id
+        else:
+            result = []
+            cup_ptr = self.get_cup_by_id(1).next
+            for _ in range(8):
+                result.append(str(cup_ptr.id))
+                cup_ptr = cup_ptr.next
+            return (''.join(result))
+
+    def rotate_clockwise(self):
+        self.current_cup = self.current_cup.next
+
+    def rotate_counterclockwise(self):
+        self.current_cup = self.current_cup.prev
+
+    def pick_up_cups(self):
+        for _ in range(3):
+            self.held_cups.append(self.current_cup.next)
+            self.current_cup.next = self.current_cup.next.next
+        self.current_cup.next.prev = self.current_cup
+
+    def choose_destination(self):
+        for d in range(1, 5):
+            dest = self.current_cup.id - d
+
+            if dest < self.lowest_cup:
+                dest = dest + self.highest_cup
+
+            if dest not in [c.id for c in self.held_cups]:
+                self.destination_id = dest
+                break
+
+    def get_cup_by_id(self, id):
+        return self.cup_table[id]
+
+    def place_cups(self):
+        cup_ptr = self.get_cup_by_id(self.destination_id)
+
+        cup_ptr.next.prev = self.held_cups[2]
+        self.held_cups[2].next = cup_ptr.next
+
+        cup_ptr.next = self.held_cups[0]
+        self.held_cups[0].prev = cup_ptr
+
+        self.held_cups = []
+
+    def insert_at_head(self, id):
+        if self.current_cup == None:  # add 1st elt to new list
+            self.current_cup = Cup(id)
+            self.current_cup.next = self.current_cup
+            self.current_cup.prev = self.current_cup
+            self.tail = self.current_cup
+        else:
+            new_cup = Cup(id)
+
+            new_cup.next = self.current_cup
+            self.current_cup.prev = new_cup
+
+            new_cup.prev = self.tail
+            self.tail.next = new_cup
+
+            self.current_cup = new_cup
+        self.cup_table[id] = self.current_cup
 
 
 # --- Day 24: Lobby Layout --- #
@@ -980,9 +1023,34 @@ def flip_tiles(black_tiles):
 
 def hex_neighbors(x, y):
     if y % 2 == 0:
-        return [(x-1, y), (x+1, y), (x-1, y-1), (x-1, y+1), (x, y+1), (x, y-1)]
+        return [(x - 1, y), (x + 1, y), (x - 1, y - 1), (x - 1, y + 1), (x, y + 1), (x, y - 1)]
     else:
-        return [(x-1, y), (x+1, y), (x, y-1), (x, y+1), (x+1, y+1), (x+1, y-1)]
+        return [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1), (x + 1, y + 1), (x + 1, y - 1)]
+
+
+# --- Day 25: Combo Breaker --- #
+def day25(inp, b=False):
+    door_pub = int(inp[0])
+    card_pub = int(inp[1])
+    door_loop = transform_subject_number(7, target=door_pub)
+    card_loop = transform_subject_number(7, target=card_pub)
+    return transform_subject_number(door_pub, loop_size=card_loop)
+
+
+def transform_subject_number(num, target=None, loop_size=None):
+    result = 1
+    if loop_size:
+        for i in range(loop_size):
+            result = (result * num) % 20201227
+    else:
+        cycle = 0
+        while True:
+            if result == target:
+                result = cycle
+                break
+            result = (result * num) % 20201227
+            cycle += 1
+    return result
 
 
 solutions = {
@@ -1010,4 +1078,5 @@ solutions = {
     22: day22,
     23: day23,
     24: day24,
+    25: day25,
 }

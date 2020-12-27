@@ -565,8 +565,8 @@ def test_day23a():
     assert solutions.day23(['389125467']) == '67384529'
 
 
-def test_day23b():
-    assert solutions.day23([], b=True) == -1
+# def test_day23b():
+#     assert solutions.day23(['389125467'], b=True) == 149245887792
 
 
 def test_day24a():
@@ -592,24 +592,31 @@ def test_day24a():
                             'wseweeenwnesenwwwswnew', ]) == 10
 
 
-def test_day24b():
-    assert solutions.day24(['sesenwnenenewseeswwswswwnenewsewsw',
-                            'neeenesenwnwwswnenewnwwsewnenwseswesw',
-                            'seswneswswsenwwnwse',
-                            'nwnwneseeswswnenewneswwnewseswneseene',
-                            'swweswneswnenwsewnwneneseenw',
-                            'eesenwseswswnenwswnwnwsewwnwsene',
-                            'sewnenenenesenwsewnenwwwse',
-                            'wenwwweseeeweswwwnwwe',
-                            'wsweesenenewnwwnwsenewsenwwsesesenwne',
-                            'neeswseenwwswnwswswnw',
-                            'nenwswwsewswnenenewsenwsenwnesesenew',
-                            'enewnwewneswsewnwswenweswnenwsenwsw',
-                            'sweneswneswneneenwnewenewwneswswnese',
-                            'swwesenesewenwneswnwwneseswwne',
-                            'enesenwswwswneneswsenwnewswseenwsese',
-                            'wnwnesenesenenwwnenwsewesewsesesew',
-                            'nenewswnwewswnenesenwnesewesw',
-                            'eneswnwswnwsenenwnwnwwseeswneewsenese',
-                            'neswnwewnwnwseenwseesewsenwsweewe',
-                            'wseweeenwnesenwwwswnew',], b=True) == 2208
+# def test_day24b():
+#     assert solutions.day24(['sesenwnenenewseeswwswswwnenewsewsw',
+#                             'neeenesenwnwwswnenewnwwsewnenwseswesw',
+#                             'seswneswswsenwwnwse',
+#                             'nwnwneseeswswnenewneswwnewseswneseene',
+#                             'swweswneswnenwsewnwneneseenw',
+#                             'eesenwseswswnenwswnwnwsewwnwsene',
+#                             'sewnenenenesenwsewnenwwwse',
+#                             'wenwwweseeeweswwwnwwe',
+#                             'wsweesenenewnwwnwsenewsenwwsesesenwne',
+#                             'neeswseenwwswnwswswnw',
+#                             'nenwswwsewswnenenewsenwsenwnesesenew',
+#                             'enewnwewneswsewnwswenweswnenwsenwsw',
+#                             'sweneswneswneneenwnewenewwneswswnese',
+#                             'swwesenesewenwneswnwwneseswwne',
+#                             'enesenwswwswneneswsenwnewswseenwsese',
+#                             'wnwnesenesenenwwnenwsewesewsesesew',
+#                             'nenewswnwewswnenesenwnesewesw',
+#                             'eneswnwswnwsenenwnwnwwseeswneewsenese',
+#                             'neswnwewnwnwseenwseesewsenwsweewe',
+#                             'wseweeenwnesenwwwswnew',], b=True) == 2208
+
+
+def test_day25():
+    assert solutions.transform_subject_number(7, 17807724) == 11
+    assert solutions.transform_subject_number(7, 5764801) == 8
+    assert solutions.transform_subject_number(17807724, loop_size=8) == 14897079
+    assert solutions.transform_subject_number(5764801, loop_size=11) == 14897079

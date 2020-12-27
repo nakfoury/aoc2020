@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 
 def run_solution(day, solution, inp, b=False):  # Compute and print a particular puzzle-day solution
-    output = "Not yet available" if (not day or not inp) else solution([x.strip('\n') for x in inp], b)
+    output = solution([x.strip('\n') for x in inp], b) if (day and inp) else "Not yet available"
     print("Day {}.{}: {}".format(day, '2' if b else '1', output))
 
 
